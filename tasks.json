@@ -1,0 +1,592 @@
+[
+  {
+    "id": "DS-075",
+    "title": "Install and configure Storybook shell",
+    "type": "ops",
+    "status": "done",
+    "notes": "Storybook 10 + Vite. Root package.json, tsconfig.json, .storybook/main.ts, .storybook/preview.ts, Introduction.stories.ts, and 36 placeholder stories across all 8 categories. Merged in PR #10."
+  },
+  {
+    "id": "DS-077",
+    "title": "Create spacing token documentation story",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Spacing story built — renders 19-token scale with CSS custom property names and proportional bars. rem column and consumer-facing descriptions added. Merged in PR #10."
+  },
+  {
+    "id": "DS-076",
+    "title": "Create neutral color token documentation story",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Colors story built and visually validated. Renders neutral primitive scale with CSS custom property names and swatches. Merged in PR #10."
+  },
+  {
+    "id": "DS-001",
+    "title": "Scaffold .claude/ directory, hooks, and CLAUDE.md",
+    "type": "ops",
+    "status": "done",
+    "notes": "Completed in feature/phase1-environment (PR #1)."
+  },
+  {
+    "id": "DS-002",
+    "title": "Set up local task tracker (tracker/ directory and /tracker command)",
+    "type": "ops",
+    "status": "done",
+    "notes": "Completed in feature/phase2-tracker (PR #2)."
+  },
+  {
+    "id": "DS-004",
+    "title": "Define spacing token scale",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Completed in feature/phase1-tokens. 19-token scale based on Marina with renamed outliers and new --spacing-xxl2 (72px). Marina source names preserved in comments."
+  },
+  {
+    "id": "DS-005",
+    "title": "Define neutral color tokens (gray scale + semantic surface/text/border/icon)",
+    "phase": 1,
+    "type": "design",
+    "status": "done",
+    "notes": "Neutral primitives in color-neutral.json. Marina structure: black / 500 / 400 / 300 / 200 / white. 300 is new — mirror pair for 400, value #c8c8c8 shifted lighter for perceptual balance. Black and white updated to pure values. Merged in PR #10."
+  },
+  {
+    "id": "DS-005b",
+    "title": "Define utility color tokens (success / error / caution / info)",
+    "phase": 1,
+    "type": "design",
+    "status": "done",
+    "notes": "Split from DS-005. color-utility.json defines success/error/caution primitives (muted + emphasis tiers). USWDS caution values to meet WCAG AA. Informational references neutral palette at semantic layer — no dedicated primitives. Merged in PR #10."
+  },
+  {
+    "id": "DS-006",
+    "title": "Define typography token structure (Heading 1–6, body large, body, body small, caption)",
+    "phase": 1,
+    "type": "design",
+    "status": "done",
+    "notes": "Theme package scaffolding with self-hosted fonts. NPM-ready theme packages (src/themes/maximus/, va-gov/, system/) with @font-face declarations and CSS vars (--font-family-heading, --font-family-body, --font-family-tabular). Storybook uses combined storybook-themes.css with data-theme scoping. Typography Playground uses CSS vars + data-theme switching — brand selector now loads actual brand fonts. Consumer usage pattern documented in Overview. Two-layer architecture complete: structural framework (tokens/structural/typography.json) + brand fonts (per-client theme sheets). Merged in PR #13."
+  },
+  {
+    "id": "DS-007a",
+    "title": "Define radius tokens",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "5 tokens extracted from Marina: none/sm/md/lg/full. 'brand'→'lg' renamed; 'circle' 1000px→9999px conventional pill value. Storybook story at Foundations/Radius. Merged in PR #11."
+  },
+  {
+    "id": "DS-007b",
+    "title": "Define elevation tokens",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "5 tokens extracted from Marina global-shadow-m0–m4 scale. Renamed to none/sm/md/lg/xl. Storybook story at Foundations/Elevation with visual card swatch per level. Merged in PR #11."
+  },
+  {
+    "id": "DS-007c",
+    "title": "Define motion tokens",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "5 duration tokens (100–500ms) + 4 easing curves (standard/decelerate/accelerate/sharp) + prefers-reduced-motion token. Storybook story at Foundations/Motion with hover-triggered duration demo and continuous easing comparison. Merged in PR #12."
+  },
+  {
+    "id": "DS-008a",
+    "title": "Define layout container and inline gap tokens",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Scope reframed mid-ticket from grid-based to container-based. Original Marina-style breakpoints + 12-column grid (columns/gutter/per-breakpoint-margin) was rejected because it doesn't match how AI generates page layouts. Adopted AI-native shape as the contract: centered max-width container + padding-inline + flex/grid gap.\n\nDELIVERED:\n  • tokens/structural/layout.json — 8 tokens:\n      Container: --layout-content-max-width (1280px), --layout-inline-padding-compact (16px), --layout-inline-padding-default (24px), --layout-padding-step (768px)\n      Gap: --layout-gap-tight (8px), --layout-gap-default (16px), --layout-gap-loose (24px), --layout-gap-comfortable (32px)\n  • src/stories/foundations/Layout.stories.ts — two stories under Foundations/Layout:\n      'Layout System' — token table, to-scale container behavior visualization across 5 viewport states, gap comparison visualization, reference CSS, 'why this shape' rationale\n      'Designing in Figma' — designer-side companion: frame strategy (375 + 1440), what replaces the column grid, Figma setup kit, handoff promise\n\nDEFERRED / SPUN OFF:\n  • Breakpoints — moved to DS-081 (component-level scale decision, kept independent from container model)\n  • Section vertical rhythm — moved to DS-080 (padding-block on section wrappers, not gap)\n  • Text measure (--text-measure 65ch) — moved to DS-006 (typography concern, applied to prose elements, not container)\n  • Layout pattern primitives (Stack/Cluster/Sidebar/Switcher/CardGrid + --layout-card-min-width) — DS-079\n  • Typography normalization across entire Storybook — DS-078\n\nRENAMES:\n  • tokens/structural/grid.json → layout.json\n  • src/stories/foundations/LayoutGrid.stories.ts → Layout.stories.ts\n  • Storybook section: 'Foundations/Layout & Grid' → 'Foundations/Layout' Merged in PR #11."
+  },
+  {
+    "id": "DS-008b",
+    "title": "Define focus-ring tokens",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "5 structural tokens (width/style/color/offset/inset-offset). focusRing + focusRingInset shared CSSResult exports — first shared style primitive in the system. Storybook story at Foundations/Focus Ring/Focus Ring Tokens. Merged in PR #12."
+  },
+  {
+    "id": "DS-070",
+    "title": "Author /list-commits skill — plain-English view of all in-flight work",
+    "type": "ops",
+    "status": "done",
+    "notes": "Completed in feature/git-workflow-skills-ds070 (PR #8). Port from ui-kit list-commits skill. Adapted for mms-ds-platform: shows what's on which branch, what's committed but not PRed, what's ahead of main."
+  },
+  {
+    "id": "DS-071",
+    "title": "Author /commit skill — gated commit workflow",
+    "type": "ops",
+    "status": "done",
+    "notes": "Written at .claude/commands/commit.md. Branch check, scope approval pause, conventional commit message. No build/test gates yet."
+  },
+  {
+    "id": "DS-072",
+    "title": "Author /pr-create skill — show PR scope and pause before opening",
+    "type": "ops",
+    "status": "done",
+    "notes": "Written at .claude/commands/pr-create.md. Shows commits + WIP, pauses for approval, writes body to /tmp/pr-body.md before gh pr create."
+  },
+  {
+    "id": "DS-073",
+    "title": "Author /pr-merge skill — conflict check then merge via gh pr merge",
+    "type": "ops",
+    "status": "done",
+    "notes": "Written at .claude/commands/pr-merge.md. Confirms PR number, dry-run conflict check, gh pr merge --delete-branch, syncs main with fetch --prune."
+  },
+  {
+    "id": "DS-074",
+    "title": "Fix violation-guard and protect-branches hooks",
+    "type": "ops",
+    "status": "done",
+    "notes": "violation-guard stripped to: rm-rf guard, force-push guard, write-to-dxhub-web-monorepo guard. protect-branches: removed git checkout main block — only blocks direct commits and pushes to main."
+  },
+  {
+    "id": "DS-069",
+    "title": "Deploy Ladle playground to S3 static hosting",
+    "type": "ops",
+    "status": "done",
+    "notes": "Deployed at https://monorepo.non-prod.dxhub.maximus.com/ — DevOps provisioned S3 bucket."
+  },
+  {
+    "id": "DS-068",
+    "title": "Migrate Ladle playground to mms-ds-platform and publish via GitHub Pages",
+    "type": "ops",
+    "status": "done",
+    "notes": "Playground migrated to mms-ds-platform/playground/ in PR #5. @dxhub/core and @dxhub/shared vendored under playground/vendor/. GitHub Pages not viable (private repo). Hosting pending DevOps S3 deployment."
+  },
+  {
+    "id": "DS-078",
+    "title": "Apply normalized typography treatment across entire Storybook",
+    "type": "build",
+    "status": "done",
+    "notes": "Layout System page (DS-008a) establishes a normalized inline typography scale grounded in WCAG 2.2 AA legibility (16px body floor, 14px aux floor, 1.6 line-height body, 1.35 headings, prose capped at ~68ch, opacity ≤ 0.7 on text, no thin weights, mono via ui-monospace). Apply the same scale across every page in Storybook — Introduction (MDX), all Foundations stories (Colors, Spacing, Radius, Elevation, Layout, future Type / Motion / Focus Ring / etc.), and all current and future component stories. Goal is uniform rhythm and accessibility floors across the entire documentation surface. Replace ad-hoc rem values with the shared `t` scale defined in Layout.stories.ts. Note: this is an interim normalization; when DS-006 (type scale) lands the `t` object is the single swap-out point to migrate every page to real typography tokens at once."
+  },
+  {
+    "id": "DS-082",
+    "title": "Define iconography system — icon library, size tokens, Storybook gallery",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "mms-icon Lit component with Phosphor registry (1,458 icons × 6 weights). Size tokens (sm/md/lg/xl). Storybook gallery with live search and copy-to-clipboard. MDX Playground docs pattern established. Merged in PR #13."
+  },
+  {
+    "id": "DS-084",
+    "title": "Add live search to Iconography Gallery story",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Interactive search input filters icons in real time. Clicking an icon copies <mms-icon> snippet to clipboard. Merged in PR #13."
+  },
+  {
+    "id": "DS-085",
+    "title": "Add direction prop to mms-icon component",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "direction='up|right|down|left' prop added to mms-icon. Three transform strategies: rotate (12 families), flip-h (10 families), flip-v (6 families). Registry rationalized: 1,512 → 1,458 icons. Merged in PR #13."
+  },
+  {
+    "id": "DS-086",
+    "title": "Add badge prop to mms-icon component",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "badge='dot' renders dot indicator; badge=N renders numeric chip (>99 shows '99+'). Merged in PR #13."
+  },
+  {
+    "id": "DS-087",
+    "title": "Define brand color palette structure (primary/secondary/tertiary + extended scales)",
+    "phase": 1,
+    "type": "design",
+    "status": "done",
+    "notes": "12-step Radix color scales for primary/secondary palettes. Light and dark mode palettes. Maximus brand colors corrected to Pantone Violet #502E91. Dynamic hexcode column in token tables. Anchor step (9) indicator in scale visualizations. Merged in PR #13."
+  },
+  {
+    "id": "DS-079",
+    "title": "Define layout pattern recipes and card-min-width token",
+    "type": "build",
+    "status": "backlog",
+    "notes": "The container model (DS-008a) defines the page-level shape — centered max-width container with internal padding. What it doesn't define is how multiple items arrange WITHIN the container. Without column grid concepts, we need a named, finite set of layout pattern recipes that AI generates natively and that map 1:1 to Figma component names. Add to tokens/structural/layout.json (or a new tokens/structural/layout-patterns.json):\n\n  • --layout-card-min-width: 280px — minimum card width threshold for repeat(auto-fill, minmax(...)) grids;     determines when a card grid wraps to fewer columns. AI defaults to ~280px naturally.\n\nAdd a new Storybook page (Foundations → Layout Patterns) documenting five recipes, each with reference CSS and Figma equivalent:\n\n  1. Stack — vertical with gap. flex column + gap.\n  2. Cluster — horizontal wrap with gap. flex row + flex-wrap + gap.\n  3. Sidebar — fixed-width sidebar + flex content. grid-template-columns or flex with basis.\n  4. Switcher — row above a threshold, column below. flex-wrap + flex-basis trick (no media query).\n  5. CardGrid — auto-fill minmax(--layout-card-min-width, 1fr).\n\nEach recipe gets a CSS class name (.ds-stack, .ds-cluster, etc.) intended to be mirrored as a Figma auto-layout component preset. The naming is the contract: designers pick a Figma component named 'Stack', AI writes a div with class 'ds-stack', they produce the same output. Patterns are based on Every Layout (every-layout.dev) primitives."
+  },
+  {
+    "id": "DS-080",
+    "title": "Add section composition pattern + vertical section padding tokens",
+    "type": "build",
+    "status": "backlog",
+    "notes": "DS-008a defined the inner container model (centered max-width + horizontal padding). The model is incomplete for real page composition because AI builds pages as stacked full-bleed sections, each containing a centered container with vertical padding-block. Adding the section pattern closes this gap.\n\nTOKENS (add to tokens/structural/layout.json):\n  • --layout-section-padding-compact: 48px — padding-block at smaller viewports (below the padding step). Aliases --spacing-xl2.\n  • --layout-section-padding-default: 96px — padding-block at the padding step and above. Aliases --spacing-xxl3.\n  • Step transitions at --layout-padding-step (768px), same boundary as horizontal padding for consistency.\n\nREFERENCE CSS PATTERN documented on the Layout System page:\n  .layout-section { padding-block: var(--layout-section-padding-compact); }\n  @media (min-width: 768px) { .layout-section { padding-block: var(--layout-section-padding-default); } }\n  .layout-section > .layout-container { ... } /* nested container handles horizontal */\n\nPAGE UPDATE — Foundations → Layout → Layout System:\n  • Restructure into two stacked sub-sections: 'Container' (existing content) and 'Section composition' (new).\n  • Expand Layout Tokens table to include the new --layout-section-padding-* values.\n  • Add a second visualization showing stacked sections with their padding-block at 375 and 1440.\n  • Update Reference CSS to show the full section + container composition pattern AI produces.\n  • Update Tip — Figma frame strategy to mention designing full-height stacked sections, not just the container.\n\nRATIONALE: Container and section are the same architectural concern — page composition. Keeping them on one page preserves the unified mental model that matches how AI actually generates code.\n\n2026-06-22 — Section vertical rhythm was initially attempted in DS-008a as `--layout-gap-section: 48px` (categorized as a 'gap' token). Pulled back because it conflates two different concerns: inline `gap` (CSS gap property, spacing between siblings inside a flex/grid container) vs section vertical rhythm (CSS `padding-block` on the section, or `margin-block` between sections). AI's mental model matches this split — `gap-2/4/6/8` for inline, `py-12/24` or `space-y-16` for section rhythm. This ticket owns the section side properly: define `--layout-section-padding-compact` and `--layout-section-padding-default` as `padding-block` tokens applied to section wrappers, NOT as gap tokens."
+  },
+  {
+    "id": "DS-081",
+    "title": "Define breakpoint token scale (component-level) — decide between Marina-inspired and AI-aligned",
+    "type": "build",
+    "status": "backlog",
+    "notes": "DS-008a removed the breakpoints section from the Layout System page because breakpoints no longer drive container margins (container uses max-width + auto-centering instead). But AI still writes media queries at conventional breakpoints for component-level responsive behavior — type scaling, layout pattern shifts (CardGrid columns, Switcher threshold), nav collapse, etc. The DS needs a sanctioned breakpoint scale or AI will improvise.\n\nDECISION REQUIRED — pick a scale:\n\n  Option A (Marina-inspired):  375 / 768 / 1024 / 1440 / 1920\n    Pros: matches Marina, matches typical Figma frame sizes (1440 = designer default), preserves prior decisions.\n    Cons: 1440 sits awkwardly against the 1280 container cap. AI doesn't naturally produce 1440 / 1920 media queries.\n\n  Option B (Tailwind / AI-native):  640 / 768 / 1024 / 1280 / 1536\n    Pros: Aligns with AI defaults (Tailwind is the most common framework AI generates). 1280 matches the container cap.\n    Cons: Deviates from Marina precedent. 1440 (designer convention) is not in the scale.\n\n  Option C (Hybrid):  375 / 768 / 1024 / 1280 / 1536  — keeps 375 (mobile design anchor) and 1280 (container cap),\n    drops 1440/1920 in favor of AI-native Tailwind values for the largest steps.\n\nSCOPE WHEN DECIDED:\n  • Update tokens/structural/layout.json with chosen breakpoint scale (replacing the existing five-breakpoint set).\n  • Restore a 'Breakpoints' section to the Layout System Storybook page, scoped to component-level responsive use.\n    Make it clear the scale does NOT drive container margins (the container model is breakpoint-agnostic except for\n    the padding step at 768).\n  • Document which breakpoints AI writes naturally vs. which are design-side anchors only.\n  • Audit prior tickets / decisions for any references to the old 375/768/1024/1440/1920 scale that need updating."
+  },
+  {
+    "id": "DS-089",
+    "title": "Set up JFrog NPM registry for @mms/ package distribution",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Decision (2026-07-02): JFrog is NOT pending approval — DevOps needs to execute the setup. This is a DevOps dependency, not an agent-actionable task. Track for handoff."
+  },
+  {
+    "id": "DS-090",
+    "title": "MCP server development for agentic prototyping (@mms/mcp)",
+    "phase": null,
+    "type": "build",
+    "status": "blocked",
+    "notes": "Decision (2026-07-02): Pending approval from Maximus IT/leadership. Blocked until approved. Analogous to ui-kit MCP server. For agentic prototyping only — not consumer-facing."
+  },
+  {
+    "id": "DS-091",
+    "title": "Define distribution pipeline strategy and ops tickets",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Decision (2026-07-02): Distribution pipeline (CSS, React binding, Salesforce, AEM, Drupal) to be tracked under Ops given DevOps dependencies. JFrog registry is prerequisite. Break into sub-tickets once JFrog is active."
+  },
+  {
+    "id": "DS-003",
+    "title": "Install and configure Style Dictionary pipeline",
+    "phase": null,
+    "type": "ops",
+    "status": "blocked",
+    "notes": "Moved to Ops — distribution infrastructure, blocked on JFrog (DevOps). DS-009 (CSS output) is one deliverable of this ticket and is absorbed here. Do not gate component work on this."
+  },
+  {
+    "id": "DS-011",
+    "title": "Configure Figma Variables output in Style Dictionary",
+    "phase": null,
+    "type": "ops",
+    "status": "blocked",
+    "notes": "Moved to Ops — Figma Variables output blocked on Figma MCP IT approval."
+  },
+  {
+    "id": "DS-012",
+    "title": "End-to-end token pipeline validation",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Moved to Ops — E2E validation is an ops checkpoint after DS-003 (Style Dictionary) is complete."
+  },
+  {
+    "id": "DS-010",
+    "title": "Author default brand sheet (@mms/theme-default)",
+    "phase": 1,
+    "type": "design",
+    "status": "backlog",
+    "notes": "Moved to Phase 1 — default brand sheet is token definition work, not pipeline infrastructure."
+  },
+  {
+    "id": "DS-088",
+    "title": "Add Brand Themes section to Storybook with per-client style guides",
+    "phase": 1,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Moved to Phase 1 — Brand Themes Storybook documents Phase 1 token work."
+  },
+  {
+    "id": "DS-013",
+    "title": "Define component authoring skills and workflow",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog"
+  },
+  {
+    "id": "DS-014",
+    "title": "Align on Storybook practice and story standards",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog"
+  },
+  {
+    "id": "DS-015",
+    "title": "Define accessibility audit workflow",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog"
+  },
+  {
+    "id": "DS-016",
+    "title": "Define token extraction skill",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog"
+  },
+  {
+    "id": "DS-083",
+    "title": "Define unit testing infrastructure (Vitest + axe-core + token integrity)",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Three test layers required before first component ships: (1) behavior tests — props produce correct rendered output, state changes correct, ARIA attributes set properly; (2) axe-core assertions — accessibility compliance per governance gate; (3) token integrity — no hardcoded values leak into component stylesheets, structural tokens not overridden by brand sheets. Author a run-tests skill file once infrastructure is in place."
+  },
+  {
+    "id": "DS-047",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-button (Marina: primary-button, secondary-button, ghost-button — single component, variant prop)",
+    "notes": "One component, three variants via prop. Ghost: no label padding — dynamic padding per variant (standard: Shoelace, Spectrum). Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-067",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-icon-button (Marina: button + icon pattern)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-027",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-link (Marina: text-link)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-048",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-text-field (Marina: text-input, text-area)",
+    "notes": "text-field naming confirmed — not text-input (Marina-specific). Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-051",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-checkbox (Marina: checkbox)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-050",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-checkbox-group (Marina: checkbox-group)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-049",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-radio (Marina: radio)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-052",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-radio-group (Marina: radio-group)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-053",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-select (Marina: select-choice)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-018",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-alert-banner (Marina: alert-banner)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-023",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-modal (Marina: modal)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-032",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-toggle (Marina: toggle)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-059",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-accordion (Marina: accordion, accordion-item)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-092",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-card (Marina: card)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-060",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-tabs (Marina: tabs, tabs-item)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-030",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-tooltip (Marina: tooltip)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-097",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-hero (Marina: hero, hero-image)",
+    "notes": "J confirmed 2026-07-02: Marina had hero components, include them. mms-promo-block dropped — mms-hero covers the need."
+  },
+  {
+    "id": "DS-093",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-inline-alert (Marina: inline-alert)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-026",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-notification (Marina: TBD — confirm source component)",
+    "notes": "In Storybook as Feedback/Notification. Confirm Marina source mapping before building."
+  },
+  {
+    "id": "DS-094",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-toast (Marina: toast)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-061",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-breadcrumbs (Marina: breadcrumb)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-066",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-header (Marina: header)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-095",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-pagination (Marina: pagination)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-096",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-side-nav (Marina: side-nav)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-063",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-stepper (Marina: progress-tracker)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-024",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-spinner (Marina: inline-spinner, page-spinner — size/context variants)",
+    "notes": "Two Marina sources combined into one component with size/context variants."
+  },
+  {
+    "id": "DS-054",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-progress-bar (Marina: progress-bar — determinate)",
+    "notes": "Determinate progress only. See mms-loading-bar (Phase 5) for indeterminate."
+  },
+  {
+    "id": "DS-031",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-skip-link — Section 508 bypass block (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last (J confirmed 2026-07-02)."
+  },
+  {
+    "id": "DS-017",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-address — US address format (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last."
+  },
+  {
+    "id": "DS-098",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-language-switcher — multi-language support (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last."
+  },
+  {
+    "id": "DS-099",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-text-size-control — accessibility preference (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last."
+  },
+  {
+    "id": "DS-100",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-loading-bar (Marina: loading-bar — indeterminate)",
+    "notes": "Indeterminate loading pattern. Lower priority than mms-spinner and mms-progress-bar."
+  },
+  {
+    "id": "DS-101",
+    "title": "Host DS Platform Task Tracker on GitHub Pages (mms-ds-tracker repo)",
+    "phase": null,
+    "type": "ops",
+    "status": "in-progress",
+    "notes": "Pattern: same as mms-ds-storybook. Create public repo 638088/mms-ds-tracker, push tracker static HTML as index.html, serve at https://638088.github.io/mms-ds-tracker/. Update publish-tracker skill to deploy there instead of committing local HTML snapshots."
+  }
+]

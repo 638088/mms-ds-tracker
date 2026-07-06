@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Platform — Task Tracker (2026-07-06)</title>
+  <style>
+    :root {
+      --c-bg: #f7f7f8;
+      --c-surface: #ffffff;
+      --c-border: #e2e2e5;
+      --c-text: #111118;
+      --c-text-subtle: #6b6b7b;
+      --c-accent: #3b5bdb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--c-bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      color: var(--c-text);
+    }
+
+    #header {
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-border);
+      padding: 14px 24px 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    #title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    h1 { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; }
+    h1 .subtitle { font-weight: 400; color: var(--c-text-subtle); margin-left: 6px; }
+
+    #total-stat { font-size: 12px; color: var(--c-text-subtle); font-variant-numeric: tabular-nums; }
+
+    #phase-stats { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+
+    .phase-stat { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--c-text-subtle); }
+    .phase-stat-label { font-weight: 600; min-width: 54px; }
+    .phase-stat-count { min-width: 32px; font-variant-numeric: tabular-nums; }
+    .phase-stat-bar { width: 64px; height: 4px; background: var(--c-border); border-radius: 2px; overflow: hidden; }
+    .phase-stat-fill { height: 100%; background: var(--c-accent); border-radius: 2px; }
+
+    #export-date { font-size: 11px; color: var(--c-text-subtle); margin-top: 6px; }
+
+    #board {
+      display: flex;
+      gap: 12px;
+      padding: 16px 24px 24px;
+      overflow-x: auto;
+      align-items: flex-start;
+      min-height: calc(100vh - 130px);
+    }
+
+    .col {
+      flex: 0 0 230px;
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col[data-status="backlog"]        { border-top: 3px solid #94a3b8; }
+    .col[data-status="in-progress"]    { border-top: 3px solid #3b82f6; }
+    .col[data-status="pending-review"] { border-top: 3px solid #f59e0b; }
+    .col[data-status="committed"]      { border-top: 3px solid #8b5cf6; }
+    .col[data-status="done"]           { border-top: 3px solid #22c55e; }
+    .col[data-status="blocked"]        { border-top: 3px solid #ef4444; }
+
+    .col-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 12px 8px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--c-text-subtle); flex-shrink: 0;
+    }
+
+    .col-count {
+      background: var(--c-bg); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700;
+    }
+
+    .card-list { padding: 0 8px 12px; flex: 1; }
+
+    .card {
+      background: var(--c-surface); border: 1px solid var(--c-border);
+      border-radius: 5px; padding: 10px 11px; margin-bottom: 7px;
+    }
+
+    .card-meta { display: flex; align-items: center; gap: 5px; margin-bottom: 6px; }
+
+    .id-chip {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+      font-family: 'SF Mono', Consolas, monospace;
+      color: var(--c-text-subtle); background: var(--c-bg);
+      border: 1px solid var(--c-border); border-radius: 3px; padding: 1px 5px;
+    }
+
+    .phase-chip {
+      font-size: 10px; font-weight: 600; color: var(--c-text-subtle);
+      background: var(--c-bg); border: 1px solid var(--c-border);
+      border-radius: 3px; padding: 1px 5px;
+    }
+
+    .card-title { font-size: 13px; font-weight: 500; line-height: 1.45; color: var(--c-text); margin: 0 0 7px; }
+
+    .type-badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.04em;
+      border-radius: 3px; padding: 2px 6px;
+    }
+
+    .type-build      { background: #e8f0fe; color: #1a56db; }
+    .type-design     { background: #f3e8ff; color: #7e22ce; }
+    .type-research   { background: #e6f8f6; color: #0f766e; }
+    .type-ops        { background: #f0f0f3; color: #4b4b5e; }
+    .type-governance { background: #fff7ed; color: #c2410c; }
+
+    .card-notes {
+      font-size: 11px; line-height: 1.5; color: var(--c-text-subtle);
+      margin: 7px 0 0; padding-top: 7px; border-top: 1px solid var(--c-border);
+    }
+
+    .empty-col { font-size: 11px; color: var(--c-border); text-align: center; padding: 20px 8px; }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  <div id="title-row">
+    <h1>DS Platform <span class="subtitle">Task Tracker</span></h1>
+    <span id="total-stat">27/76 tasks (36%)</span>
+  </div>
+  <div id="phase-stats">
+    <div class="phase-stat">
+    <span class="phase-stat-label">Phase 1</span>
+    <span class="phase-stat-count">16/18</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:89%"></div></div>
+  </div>
+<div class="phase-stat">
+    <span class="phase-stat-label">Phase 2</span>
+    <span class="phase-stat-count">0/5</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:0%"></div></div>
+  </div>
+<div class="phase-stat">
+    <span class="phase-stat-label">Phase 3</span>
+    <span class="phase-stat-count">0/11</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:0%"></div></div>
+  </div>
+<div class="phase-stat">
+    <span class="phase-stat-label">Phase 4</span>
+    <span class="phase-stat-count">0/16</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:0%"></div></div>
+  </div>
+<div class="phase-stat">
+    <span class="phase-stat-label">Phase 5</span>
+    <span class="phase-stat-count">0/5</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:0%"></div></div>
+  </div>
+<div class="phase-stat">
+    <span class="phase-stat-label">Ops</span>
+    <span class="phase-stat-count">11/21</span>
+    <div class="phase-stat-bar"><div class="phase-stat-fill" style="width:52%"></div></div>
+  </div>
+  </div>
+  <p id="export-date">Exported 2026-07-06</p>
+</header>
+
+<main id="board">
+  <section class="col" data-status="backlog">
+    <div class="col-header">Backlog <span class="col-count">45</span></div>
+    <div class="card-list"><div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-079</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Define layout pattern recipes and card-min-width token</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">The container model (DS-008a) defines the page-level shape — centered max-width container with internal padding. What it doesn't define is how multiple items arrange WITHIN the container. Without column grid concepts, we need a named, finite set of layout pattern recipes that AI generates natively and that map 1:1 to Figma component names. Add to tokens/structural/layout.json (or a new tokens/structural/layout-patterns.json):
+
+  • --layout-card-min-width: 280px — minimum card width threshold for repeat(auto-fill, minmax(...)) grids;     determines when a card grid wraps to fewer columns. AI defaults to ~280px naturally.
+
+Add a new Storybook page (Foundations → Layout Patterns) documenting five recipes, each with reference CSS and Figma equivalent:
+
+  1. Stack — vertical with gap. flex column + gap.
+  2. Cluster — horizontal wrap with gap. flex row + flex-wrap + gap.
+  3. Sidebar — fixed-width sidebar + flex content. grid-template-columns or flex with basis.
+  4. Switcher — row above a threshold, column below. flex-wrap + flex-basis trick (no media query).
+  5. CardGrid — auto-fill minmax(--layout-card-min-width, 1fr).
+
+Each recipe gets a CSS class name (.ds-stack, .ds-cluster, etc.) intended to be mirrored as a Figma auto-layout component preset. The naming is the contract: designers pick a Figma component named 'Stack', AI writes a div with class 'ds-stack', they produce the same output. Patterns are based on Every Layout (every-layout.dev) primitives.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-080</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Add section composition pattern + vertical section padding tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">DS-008a defined the inner container model (centered max-width + horizontal padding). The model is incomplete for real page composition because AI builds pages as stacked full-bleed sections, each containing a centered container with vertical padding-block. Adding the section pattern closes this gap.
+
+TOKENS (add to tokens/structural/layout.json):
+  • --layout-section-padding-compact: 48px — padding-block at smaller viewports (below the padding step). Aliases --spacing-xl2.
+  • --layout-section-padding-default: 96px — padding-block at the padding step and above. Aliases --spacing-xxl3.
+  • Step transitions at --layout-padding-step (768px), same boundary as horizontal padding for consistency.
+
+REFERENCE CSS PATTERN documented on the Layout System page:
+  .layout-section { padding-block: var(--layout-section-padding-compact); }
+  @media (min-width: 768px) { .layout-section { padding-block: var(--layout-section-padding-default); } }
+  .layout-section > .layout-container { ... } /* nested container handles horizontal */
+
+PAGE UPDATE — Foundations → Layout → Layout System:
+  • Restructure into two stacked sub-sections: 'Container' (existing content) and 'Section composition' (new).
+  • Expand Layout Tokens table to include the new --layout-section-padding-* values.
+  • Add a second visualization showing stacked sections with their padding-block at 375 and 1440.
+  • Update Reference CSS to show the full section + container composition pattern AI produces.
+  • Update Tip — Figma frame strategy to mention designing full-height stacked sections, not just the container.
+
+RATIONALE: Container and section are the same architectural concern — page composition. Keeping them on one page preserves the unified mental model that matches how AI actually generates code.
+
+2026-06-22 — Section vertical rhythm was initially attempted in DS-008a as `--layout-gap-section: 48px` (categorized as a 'gap' token). Pulled back because it conflates two different concerns: inline `gap` (CSS gap property, spacing between siblings inside a flex/grid container) vs section vertical rhythm (CSS `padding-block` on the section, or `margin-block` between sections). AI's mental model matches this split — `gap-2/4/6/8` for inline, `py-12/24` or `space-y-16` for section rhythm. This ticket owns the section side properly: define `--layout-section-padding-compact` and `--layout-section-padding-default` as `padding-block` tokens applied to section wrappers, NOT as gap tokens.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-081</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Define breakpoint token scale (component-level) — decide between Marina-inspired and AI-aligned</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">DS-008a removed the breakpoints section from the Layout System page because breakpoints no longer drive container margins (container uses max-width + auto-centering instead). But AI still writes media queries at conventional breakpoints for component-level responsive behavior — type scaling, layout pattern shifts (CardGrid columns, Switcher threshold), nav collapse, etc. The DS needs a sanctioned breakpoint scale or AI will improvise.
+
+DECISION REQUIRED — pick a scale:
+
+  Option A (Marina-inspired):  375 / 768 / 1024 / 1440 / 1920
+    Pros: matches Marina, matches typical Figma frame sizes (1440 = designer default), preserves prior decisions.
+    Cons: 1440 sits awkwardly against the 1280 container cap. AI doesn't naturally produce 1440 / 1920 media queries.
+
+  Option B (Tailwind / AI-native):  640 / 768 / 1024 / 1280 / 1536
+    Pros: Aligns with AI defaults (Tailwind is the most common framework AI generates). 1280 matches the container cap.
+    Cons: Deviates from Marina precedent. 1440 (designer convention) is not in the scale.
+
+  Option C (Hybrid):  375 / 768 / 1024 / 1280 / 1536  — keeps 375 (mobile design anchor) and 1280 (container cap),
+    drops 1440/1920 in favor of AI-native Tailwind values for the largest steps.
+
+SCOPE WHEN DECIDED:
+  • Update tokens/structural/layout.json with chosen breakpoint scale (replacing the existing five-breakpoint set).
+  • Restore a 'Breakpoints' section to the Layout System Storybook page, scoped to component-level responsive use.
+    Make it clear the scale does NOT drive container margins (the container model is breakpoint-agnostic except for
+    the padding step at 768).
+  • Document which breakpoints AI writes naturally vs. which are design-side anchors only.
+  • Audit prior tickets / decisions for any references to the old 375/768/1024/1440/1920 scale that need updating.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-089</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Set up JFrog NPM registry for @mms/ package distribution</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Decision (2026-07-02): JFrog is NOT pending approval — DevOps needs to execute the setup. This is a DevOps dependency, not an agent-actionable task. Track for handoff.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-091</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Define distribution pipeline strategy and ops tickets</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Decision (2026-07-02): Distribution pipeline (CSS, React binding, Salesforce, AEM, Drupal) to be tracked under Ops given DevOps dependencies. JFrog registry is prerequisite. Break into sub-tickets once JFrog is active.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-012</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">End-to-end token pipeline validation</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Moved to Ops — E2E validation is an ops checkpoint after DS-003 (Style Dictionary) is complete.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-010</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Author default brand sheet (@mms/theme-default)</p>
+    <span class="type-badge type-design">design</span>
+    <p class="card-notes">Moved to Phase 1 — default brand sheet is token definition work, not pipeline infrastructure.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-088</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Add Brand Themes section to Storybook with per-client style guides</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Moved to Phase 1 — Brand Themes Storybook documents Phase 1 token work.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-013</span>
+      <span class="phase-chip">P2</span>
+    </div>
+    <p class="card-title">Define component authoring skills and workflow</p>
+    <span class="type-badge type-governance">governance</span>
+    
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-014</span>
+      <span class="phase-chip">P2</span>
+    </div>
+    <p class="card-title">Align on Storybook practice and story standards</p>
+    <span class="type-badge type-governance">governance</span>
+    
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-015</span>
+      <span class="phase-chip">P2</span>
+    </div>
+    <p class="card-title">Define accessibility audit workflow</p>
+    <span class="type-badge type-governance">governance</span>
+    
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-016</span>
+      <span class="phase-chip">P2</span>
+    </div>
+    <p class="card-title">Define token extraction skill</p>
+    <span class="type-badge type-governance">governance</span>
+    
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-083</span>
+      <span class="phase-chip">P2</span>
+    </div>
+    <p class="card-title">Define unit testing infrastructure (Vitest + axe-core + token integrity)</p>
+    <span class="type-badge type-governance">governance</span>
+    <p class="card-notes">Three test layers required before first component ships: (1) behavior tests — props produce correct rendered output, state changes correct, ARIA attributes set properly; (2) axe-core assertions — accessibility compliance per governance gate; (3) token integrity — no hardcoded values leak into component stylesheets, structural tokens not overridden by brand sheets. Author a run-tests skill file once infrastructure is in place.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-047</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-button (Marina: primary-button, secondary-button, ghost-button — single component, variant prop)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">One component, three variants via prop. Ghost: no label padding — dynamic padding per variant (standard: Shoelace, Spectrum). Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-067</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-icon-button (Marina: button + icon pattern)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-027</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-link (Marina: text-link)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-048</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-text-field (Marina: text-input, text-area)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">text-field naming confirmed — not text-input (Marina-specific). Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-051</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-checkbox (Marina: checkbox)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-050</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-checkbox-group (Marina: checkbox-group)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-049</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-radio (Marina: radio)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-052</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-radio-group (Marina: radio-group)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-053</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-select (Marina: select-choice)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-018</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-alert-banner (Marina: alert-banner)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-023</span>
+      <span class="phase-chip">P3</span>
+    </div>
+    <p class="card-title">Build mms-modal (Marina: modal)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-032</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-toggle (Marina: toggle)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-059</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-accordion (Marina: accordion, accordion-item)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-092</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-card (Marina: card)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-060</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-tabs (Marina: tabs, tabs-item)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-030</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-tooltip (Marina: tooltip)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-097</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-hero (Marina: hero, hero-image)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">J confirmed 2026-07-02: Marina had hero components, include them. mms-promo-block dropped — mms-hero covers the need.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-093</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-inline-alert (Marina: inline-alert)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-026</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-notification (Marina: TBD — confirm source component)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">In Storybook as Feedback/Notification. Confirm Marina source mapping before building.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-094</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-toast (Marina: toast)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-061</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-breadcrumbs (Marina: breadcrumb)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-066</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-header (Marina: header)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-095</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-pagination (Marina: pagination)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-096</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-side-nav (Marina: side-nav)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-063</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-stepper (Marina: progress-tracker)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Marina markup reused, mms CSS applied.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-024</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-spinner (Marina: inline-spinner, page-spinner — size/context variants)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Two Marina sources combined into one component with size/context variants.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-054</span>
+      <span class="phase-chip">P4</span>
+    </div>
+    <p class="card-title">Build mms-progress-bar (Marina: progress-bar — determinate)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Determinate progress only. See mms-loading-bar (Phase 5) for indeterminate.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-031</span>
+      <span class="phase-chip">P5</span>
+    </div>
+    <p class="card-title">Build mms-skip-link — Section 508 bypass block (net-new, government-specific)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Net-new. No Marina equivalent. Work on these last (J confirmed 2026-07-02).</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-017</span>
+      <span class="phase-chip">P5</span>
+    </div>
+    <p class="card-title">Build mms-address — US address format (net-new, government-specific)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Net-new. No Marina equivalent. Work on these last.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-098</span>
+      <span class="phase-chip">P5</span>
+    </div>
+    <p class="card-title">Build mms-language-switcher — multi-language support (net-new, government-specific)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Net-new. No Marina equivalent. Work on these last.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-099</span>
+      <span class="phase-chip">P5</span>
+    </div>
+    <p class="card-title">Build mms-text-size-control — accessibility preference (net-new, government-specific)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Net-new. No Marina equivalent. Work on these last.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-100</span>
+      <span class="phase-chip">P5</span>
+    </div>
+    <p class="card-title">Build mms-loading-bar (Marina: loading-bar — indeterminate)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Indeterminate loading pattern. Lower priority than mms-spinner and mms-progress-bar.</p>
+  </div></div>
+  </section>
+<section class="col" data-status="in-progress">
+    <div class="col-header">In Progress <span class="col-count">1</span></div>
+    <div class="card-list"><div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-101</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Host DS Platform Task Tracker on GitHub Pages (mms-ds-tracker repo)</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Pattern: same as mms-ds-storybook. Create public repo 638088/mms-ds-tracker, push tracker static HTML as index.html, serve at https://638088.github.io/mms-ds-tracker/. Update publish-tracker skill to deploy there instead of committing local HTML snapshots.</p>
+  </div></div>
+  </section>
+<section class="col" data-status="pending-review">
+    <div class="col-header">Pending Review <span class="col-count">0</span></div>
+    <div class="card-list"><p class="empty-col">—</p></div>
+  </section>
+<section class="col" data-status="committed">
+    <div class="col-header">Committed <span class="col-count">0</span></div>
+    <div class="card-list"><p class="empty-col">—</p></div>
+  </section>
+<section class="col" data-status="done">
+    <div class="col-header">Done <span class="col-count">27</span></div>
+    <div class="card-list"><div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-075</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Install and configure Storybook shell</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Storybook 10 + Vite. Root package.json, tsconfig.json, .storybook/main.ts, .storybook/preview.ts, Introduction.stories.ts, and 36 placeholder stories across all 8 categories. Merged in PR #10.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-077</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Create spacing token documentation story</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Spacing story built — renders 19-token scale with CSS custom property names and proportional bars. rem column and consumer-facing descriptions added. Merged in PR #10.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-076</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Create neutral color token documentation story</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Colors story built and visually validated. Renders neutral primitive scale with CSS custom property names and swatches. Merged in PR #10.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-001</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Scaffold .claude/ directory, hooks, and CLAUDE.md</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Completed in feature/phase1-environment (PR #1).</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-002</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Set up local task tracker (tracker/ directory and /tracker command)</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Completed in feature/phase2-tracker (PR #2).</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-004</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define spacing token scale</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Completed in feature/phase1-tokens. 19-token scale based on Marina with renamed outliers and new --spacing-xxl2 (72px). Marina source names preserved in comments.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-005</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define neutral color tokens (gray scale + semantic surface/text/border/icon)</p>
+    <span class="type-badge type-design">design</span>
+    <p class="card-notes">Neutral primitives in color-neutral.json. Marina structure: black / 500 / 400 / 300 / 200 / white. 300 is new — mirror pair for 400, value #c8c8c8 shifted lighter for perceptual balance. Black and white updated to pure values. Merged in PR #10.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-005b</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define utility color tokens (success / error / caution / info)</p>
+    <span class="type-badge type-design">design</span>
+    <p class="card-notes">Split from DS-005. color-utility.json defines success/error/caution primitives (muted + emphasis tiers). USWDS caution values to meet WCAG AA. Informational references neutral palette at semantic layer — no dedicated primitives. Merged in PR #10.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-006</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define typography token structure (Heading 1–6, body large, body, body small, caption)</p>
+    <span class="type-badge type-design">design</span>
+    <p class="card-notes">Theme package scaffolding with self-hosted fonts. NPM-ready theme packages (src/themes/maximus/, va-gov/, system/) with @font-face declarations and CSS vars (--font-family-heading, --font-family-body, --font-family-tabular). Storybook uses combined storybook-themes.css with data-theme scoping. Typography Playground uses CSS vars + data-theme switching — brand selector now loads actual brand fonts. Consumer usage pattern documented in Overview. Two-layer architecture complete: structural framework (tokens/structural/typography.json) + brand fonts (per-client theme sheets). Merged in PR #13.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-007a</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define radius tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">5 tokens extracted from Marina: none/sm/md/lg/full. 'brand'→'lg' renamed; 'circle' 1000px→9999px conventional pill value. Storybook story at Foundations/Radius. Merged in PR #11.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-007b</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define elevation tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">5 tokens extracted from Marina global-shadow-m0–m4 scale. Renamed to none/sm/md/lg/xl. Storybook story at Foundations/Elevation with visual card swatch per level. Merged in PR #11.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-007c</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define motion tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">5 duration tokens (100–500ms) + 4 easing curves (standard/decelerate/accelerate/sharp) + prefers-reduced-motion token. Storybook story at Foundations/Motion with hover-triggered duration demo and continuous easing comparison. Merged in PR #12.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-008a</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define layout container and inline gap tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Scope reframed mid-ticket from grid-based to container-based. Original Marina-style breakpoints + 12-column grid (columns/gutter/per-breakpoint-margin) was rejected because it doesn't match how AI generates page layouts. Adopted AI-native shape as the contract: centered max-width container + padding-inline + flex/grid gap.
+
+DELIVERED:
+  • tokens/structural/layout.json — 8 tokens:
+      Container: --layout-content-max-width (1280px), --layout-inline-padding-compact (16px), --layout-inline-padding-default (24px), --layout-padding-step (768px)
+      Gap: --layout-gap-tight (8px), --layout-gap-default (16px), --layout-gap-loose (24px), --layout-gap-comfortable (32px)
+  • src/stories/foundations/Layout.stories.ts — two stories under Foundations/Layout:
+      'Layout System' — token table, to-scale container behavior visualization across 5 viewport states, gap comparison visualization, reference CSS, 'why this shape' rationale
+      'Designing in Figma' — designer-side companion: frame strategy (375 + 1440), what replaces the column grid, Figma setup kit, handoff promise
+
+DEFERRED / SPUN OFF:
+  • Breakpoints — moved to DS-081 (component-level scale decision, kept independent from container model)
+  • Section vertical rhythm — moved to DS-080 (padding-block on section wrappers, not gap)
+  • Text measure (--text-measure 65ch) — moved to DS-006 (typography concern, applied to prose elements, not container)
+  • Layout pattern primitives (Stack/Cluster/Sidebar/Switcher/CardGrid + --layout-card-min-width) — DS-079
+  • Typography normalization across entire Storybook — DS-078
+
+RENAMES:
+  • tokens/structural/grid.json → layout.json
+  • src/stories/foundations/LayoutGrid.stories.ts → Layout.stories.ts
+  • Storybook section: 'Foundations/Layout & Grid' → 'Foundations/Layout' Merged in PR #11.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-008b</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define focus-ring tokens</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">5 structural tokens (width/style/color/offset/inset-offset). focusRing + focusRingInset shared CSSResult exports — first shared style primitive in the system. Storybook story at Foundations/Focus Ring/Focus Ring Tokens. Merged in PR #12.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-070</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Author /list-commits skill — plain-English view of all in-flight work</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Completed in feature/git-workflow-skills-ds070 (PR #8). Port from ui-kit list-commits skill. Adapted for mms-ds-platform: shows what's on which branch, what's committed but not PRed, what's ahead of main.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-071</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Author /commit skill — gated commit workflow</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Written at .claude/commands/commit.md. Branch check, scope approval pause, conventional commit message. No build/test gates yet.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-072</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Author /pr-create skill — show PR scope and pause before opening</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Written at .claude/commands/pr-create.md. Shows commits + WIP, pauses for approval, writes body to /tmp/pr-body.md before gh pr create.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-073</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Author /pr-merge skill — conflict check then merge via gh pr merge</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Written at .claude/commands/pr-merge.md. Confirms PR number, dry-run conflict check, gh pr merge --delete-branch, syncs main with fetch --prune.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-074</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Fix violation-guard and protect-branches hooks</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">violation-guard stripped to: rm-rf guard, force-push guard, write-to-dxhub-web-monorepo guard. protect-branches: removed git checkout main block — only blocks direct commits and pushes to main.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-069</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Deploy Ladle playground to S3 static hosting</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Deployed at https://monorepo.non-prod.dxhub.maximus.com/ — DevOps provisioned S3 bucket.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-068</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Migrate Ladle playground to mms-ds-platform and publish via GitHub Pages</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Playground migrated to mms-ds-platform/playground/ in PR #5. @dxhub/core and @dxhub/shared vendored under playground/vendor/. GitHub Pages not viable (private repo). Hosting pending DevOps S3 deployment.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-078</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Apply normalized typography treatment across entire Storybook</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Layout System page (DS-008a) establishes a normalized inline typography scale grounded in WCAG 2.2 AA legibility (16px body floor, 14px aux floor, 1.6 line-height body, 1.35 headings, prose capped at ~68ch, opacity ≤ 0.7 on text, no thin weights, mono via ui-monospace). Apply the same scale across every page in Storybook — Introduction (MDX), all Foundations stories (Colors, Spacing, Radius, Elevation, Layout, future Type / Motion / Focus Ring / etc.), and all current and future component stories. Goal is uniform rhythm and accessibility floors across the entire documentation surface. Replace ad-hoc rem values with the shared `t` scale defined in Layout.stories.ts. Note: this is an interim normalization; when DS-006 (type scale) lands the `t` object is the single swap-out point to migrate every page to real typography tokens at once.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-082</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define iconography system — icon library, size tokens, Storybook gallery</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">mms-icon Lit component with Phosphor registry (1,458 icons × 6 weights). Size tokens (sm/md/lg/xl). Storybook gallery with live search and copy-to-clipboard. MDX Playground docs pattern established. Merged in PR #13.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-084</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Add live search to Iconography Gallery story</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Interactive search input filters icons in real time. Clicking an icon copies <mms-icon> snippet to clipboard. Merged in PR #13.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-085</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Add direction prop to mms-icon component</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">direction='up|right|down|left' prop added to mms-icon. Three transform strategies: rotate (12 families), flip-h (10 families), flip-v (6 families). Registry rationalized: 1,512 → 1,458 icons. Merged in PR #13.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-086</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Add badge prop to mms-icon component</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">badge='dot' renders dot indicator; badge=N renders numeric chip (>99 shows '99+'). Merged in PR #13.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-087</span>
+      <span class="phase-chip">P1</span>
+    </div>
+    <p class="card-title">Define brand color palette structure (primary/secondary/tertiary + extended scales)</p>
+    <span class="type-badge type-design">design</span>
+    <p class="card-notes">12-step Radix color scales for primary/secondary palettes. Light and dark mode palettes. Maximus brand colors corrected to Pantone Violet #502E91. Dynamic hexcode column in token tables. Anchor step (9) indicator in scale visualizations. Merged in PR #13.</p>
+  </div></div>
+  </section>
+<section class="col" data-status="blocked">
+    <div class="col-header">Blocked <span class="col-count">3</span></div>
+    <div class="card-list"><div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-090</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">MCP server development for agentic prototyping (@mms/mcp)</p>
+    <span class="type-badge type-build">build</span>
+    <p class="card-notes">Decision (2026-07-02): Pending approval from Maximus IT/leadership. Blocked until approved. Analogous to ui-kit MCP server. For agentic prototyping only — not consumer-facing.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-003</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Install and configure Style Dictionary pipeline</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Moved to Ops — distribution infrastructure, blocked on JFrog (DevOps). DS-009 (CSS output) is one deliverable of this ticket and is absorbed here. Do not gate component work on this.</p>
+  </div>
+<div class="card">
+    <div class="card-meta">
+      <span class="id-chip">DS-011</span>
+      <span class="phase-chip">Ops</span>
+    </div>
+    <p class="card-title">Configure Figma Variables output in Style Dictionary</p>
+    <span class="type-badge type-ops">ops</span>
+    <p class="card-notes">Moved to Ops — Figma Variables output blocked on Figma MCP IT approval.</p>
+  </div></div>
+  </section>
+</main>
+
+</body>
+</html>

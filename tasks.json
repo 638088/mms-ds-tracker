@@ -276,7 +276,7 @@
   {
     "id": "DS-010",
     "title": "Author default brand sheet (@mms/theme-default)",
-    "phase": 1,
+    "phase": 6,
     "type": "design",
     "status": "backlog",
     "notes": "Moved to Phase 1 — default brand sheet is token definition work, not pipeline infrastructure."
@@ -284,7 +284,7 @@
   {
     "id": "DS-088",
     "title": "Add Brand Themes section to Storybook with per-client style guides",
-    "phase": 1,
+    "phase": 6,
     "type": "build",
     "status": "backlog",
     "notes": "Moved to Phase 1 — Brand Themes Storybook documents Phase 1 token work."
@@ -586,7 +586,7 @@
     "title": "Host DS Platform Task Tracker on GitHub Pages (mms-ds-tracker repo)",
     "phase": null,
     "type": "ops",
-    "status": "in-progress",
+    "status": "committed",
     "notes": "Pattern: same as mms-ds-storybook. Create public repo 638088/mms-ds-tracker, push tracker static HTML as index.html, serve at https://638088.github.io/mms-ds-tracker/. Update publish-tracker skill to deploy there instead of committing local HTML snapshots."
   }
 ]

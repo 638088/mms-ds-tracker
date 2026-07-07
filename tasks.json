@@ -251,11 +251,11 @@
   },
   {
     "id": "DS-003",
-    "title": "Install and configure Style Dictionary pipeline",
+    "title": "Configure @mms/tokens-structural NPM package and publish via JFrog",
     "phase": null,
     "type": "ops",
     "status": "blocked",
-    "notes": "Moved to Ops — distribution infrastructure, blocked on JFrog (DevOps). DS-009 (CSS output) is one deliverable of this ticket and is absorbed here. Do not gate component work on this."
+    "notes": "Distribution only — packaging tokens-structural.css (built by DS-009) as an NPM package published via JFrog. Blocked on DevOps JFrog setup (DS-089). DS-009 handles the local CSS build; this handles consumer distribution."
   },
   {
     "id": "DS-011",
@@ -294,7 +294,8 @@
     "title": "Define component authoring skills and workflow",
     "phase": 2,
     "type": "governance",
-    "status": "backlog"
+    "status": "done",
+    "notes": "build-component.prompt.md — 6-phase workflow. Merged in PR #21."
   },
   {
     "id": "DS-014",
@@ -586,7 +587,55 @@
     "title": "Host DS Platform Task Tracker on GitHub Pages (mms-ds-tracker repo)",
     "phase": null,
     "type": "ops",
-    "status": "committed",
-    "notes": "Pattern: same as mms-ds-storybook. Create public repo 638088/mms-ds-tracker, push tracker static HTML as index.html, serve at https://638088.github.io/mms-ds-tracker/. Update publish-tracker skill to deploy there instead of committing local HTML snapshots."
+    "status": "done",
+    "notes": "Live at https://638088.github.io/mms-ds-tracker/. publish-tracker.prompt.md updated."
+  },
+  {
+    "id": "DS-009",
+    "title": "Build tokens-structural.css via Style Dictionary (local build — no JFrog required)",
+    "phase": 2,
+    "type": "build",
+    "status": "done",
+    "notes": "Complete. Style Dictionary pipeline: structural → semantic → theme layers. 12-step OKLCH brand color scales (light + dark). Size token scale (18 tokens). Merged in PR #21."
+  },
+  {
+    "id": "DS-102",
+    "title": "Define ENV attribute strategy: data-brand-theme vs data-color-theme",
+    "phase": 2,
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Architectural decision required before Phase 3 starts. Current Marina pattern uses data-color-theme + data-writing-system as separate ENV attributes. Proposed: consolidate into data-brand-theme (one attribute that carries brand identity — colors, typography, directionality). Decision affects: every mms-* component API, every Storybook story argType, theme package design (@mms/theme-[client] structure). Must be resolved and documented in copilot-instructions.md + CLAUDE.md before first Phase 3 component is built."
+  },
+  {
+    "id": "DS-103",
+    "title": "Review and refactor spacing tokens (including naming consistency)",
+    "phase": 2,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Audit spacing token scale for naming consistency (xs0/xs1/xs2 ordering, lg-mid outlier). Consider aligning with size token naming convention. Verify all values are used in component builds. Clean up Marina source comments once stabilized."
+  },
+  {
+    "id": "DS-104",
+    "title": "Create border-width token scale",
+    "phase": 2,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Define structural border-width tokens (hairline/thin/medium/thick). Audit Marina components for common border-width values. Add Storybook story at Foundations/Border Width. Distinct from size tokens — semantic purpose is stroke thickness, not element dimensions."
+  },
+  {
+    "id": "DS-105",
+    "title": "Create disabled/interactive state tokens",
+    "phase": 2,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Define structural tokens for component states: disabled opacity, hover/pressed color shifts, active/focus adjustments. May include interaction timing tokens. Foundation for Phase 3 component state styling consistency."
+  },
+  {
+    "id": "DS-106",
+    "title": "Revisit layout tokens: grid and column system",
+    "phase": 2,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Re-evaluate DS-008a decision to remove grid/column tokens. Consider hybrid approach: keep AI-native container model + add optional column grid tokens for designer alignment. Assess whether CardGrid pattern (DS-079) suffices or if explicit column counts are needed for complex layouts."
   }
 ]

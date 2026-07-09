@@ -302,29 +302,32 @@
     "title": "Align on Storybook practice and story standards",
     "phase": 2,
     "type": "governance",
-    "status": "backlog"
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Contract at .github/contracts/storybook-standards.md + .claude/contracts/storybook-standards.md. Docs-only approach, single Default story, Global Props category, centered/fullscreen layout only."
   },
   {
     "id": "DS-015",
     "title": "Define accessibility audit workflow",
     "phase": 2,
     "type": "governance",
-    "status": "backlog"
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Absorbed into /test-component skill as Layer 2. WCAG 2.2 AA compliance. axe-core tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa."
   },
   {
     "id": "DS-016",
-    "title": "Define token extraction skill",
+    "title": "Token strategy guide for ui-kit component porting",
     "phase": 2,
     "type": "governance",
-    "status": "backlog"
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Pivoted from mapping JSON to strategy guide at .claude/contracts/token-strategy.md. Semantic decision tree: Marina intent → mms token. Covers colors, spacing, radius, elevation, focus ring, typography, icons, motion."
   },
   {
     "id": "DS-083",
     "title": "Define unit testing infrastructure (Vitest + axe-core + token integrity)",
     "phase": 2,
     "type": "governance",
-    "status": "backlog",
-    "notes": "Three test layers required before first component ships: (1) behavior tests — props produce correct rendered output, state changes correct, ARIA attributes set properly; (2) axe-core assertions — accessibility compliance per governance gate; (3) token integrity — no hardcoded values leak into component stylesheets, structural tokens not overridden by brand sheets. Author a run-tests skill file once infrastructure is in place."
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Vitest + Playwright + axe-core. validate-tokens.mjs and audit-hardcoded-values.mjs. Dual-format skills (.agent.md + SKILL.md) for /build-component, /test-component, /commit, /pr-create, /pr-merge."
   },
   {
     "id": "DS-047",
@@ -600,11 +603,11 @@
   },
   {
     "id": "DS-102",
-    "title": "Define ENV attribute strategy: data-brand-theme vs data-color-theme",
+    "title": "Define Global Props strategy (theme + density)",
     "phase": 2,
     "type": "governance",
-    "status": "backlog",
-    "notes": "Architectural decision required before Phase 3 starts. Current Marina pattern uses data-color-theme + data-writing-system as separate ENV attributes. Proposed: consolidate into data-brand-theme (one attribute that carries brand identity — colors, typography, directionality). Decision affects: every mms-* component API, every Storybook story argType, theme package design (@mms/theme-[client] structure). Must be resolved and documented in copilot-instructions.md + CLAUDE.md before first Phase 3 component is built."
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Contract at .github/contracts/global-props.md + .claude/contracts/global-props.md. Decision: data-theme (maximus/va-gov/default) + data-density (default/compact). No mode/radius/writingsystem props. Renamed from ENV Props to Global Props."
   },
   {
     "id": "DS-103",
@@ -655,5 +658,69 @@
     "type": "build",
     "status": "backlog",
     "notes": "CONTEXT (from DS-105 discussion 2026-07-08):\n\nTwo approaches to hover effects exist:\n\n1. STEP-SHIFTING (adopted) — Move to the next step in the 12-step scale. Button at step 9 → hover at step 10. Surface at step 3 → hover at step 4. This is what M3 and Tailwind use.\n\n2. OVERLAY (deferred) — Add semi-transparent black/white layer on top. ui-kit uses rgba(0,0,0,0.20) and rgba(255,255,255,0.20).\n\nWHY M3 DROPPED OVERLAYS (M2→M3 transition reasoning):\n  • Token integrity — overlays produce computed colors that aren't tokens, can't be referenced/themed/contrast-validated\n  • Accessibility predictability — overlays produce inconsistent results across the scale (20% black on step 3 vs step 9)\n  • Simpler implementation — step-shifting is just var(--color-primary-10)\n  • Design-code parity — Figma Variables can't express blend modes\n  • Dynamic theming — tonal palettes scale to arbitrary colors, overlays don't\n\nEDGE CASES WHERE OVERLAYS MAY BE NEEDED:\n  • Transparent/ghost elements on unknown backgrounds\n  • Dynamic colors from external sources (user-generated, CMS-injected)\n  • Interactive overlays on images\n\nDECISION: Start with step-shifting only (DS-105). Revisit overlays if edge cases arise in Phase 3 component builds.\n\nIF IMPLEMENTED:\n  --color-overlay-hover-light: rgba(255,255,255,0.20)  /* ui-kit value */\n  --color-overlay-hover-dark: rgba(0,0,0,0.20)         /* ui-kit value */"
+  },
+  {
+    "id": "DS-109",
+    "title": "Create /publish-nexus skill for JFrog NPM release",
+    "phase": null,
+    "type": "ops",
+    "status": "blocked",
+    "notes": "Equivalent to ui-kit /publish-nexus. Post-merge NPM release workflow. Blocked on DS-089 (JFrog setup). Track for handoff once JFrog is active."
+  },
+  {
+    "id": "DS-110",
+    "title": "Create /modify-component skill (add-feature + fix-bug consolidated)",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Consolidates ui-kit add-feature + fix-bug skills. Mode param: feature | bug. Both are 'modify existing component' with different intent but same workflow with minor variations."
+  },
+  {
+    "id": "DS-111",
+    "title": "Create /synthesize-session skill for knowledge extraction",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). /save-session → /synthesize-session chain. Scans session-log.md for patterns, decisions, violations."
+  },
+  {
+    "id": "DS-112",
+    "title": "Visual outcome matrix for multi-theme testing",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Verify brand tokens render correctly across all themes (mms-maximus, mms-va-gov, etc.). For MVP1, only mms-maximus theme is tested. Multi-theme matrix deferred."
+  },
+  {
+    "id": "DS-113",
+    "title": "Pre-Edit CSS Impact Analysis guard",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Guard for @media/@container edits — prevents unintended breakpoint coverage. Only needed when editing existing component CSS, not initial builds."
+  },
+  {
+    "id": "DS-114",
+    "title": "Create /sync-figma-structure skill",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Port from ui-kit. Sync Figma component structure into component-specs.json. Requires Figma MCP + API access."
+  },
+  {
+    "id": "DS-115",
+    "title": "Create /sync-tokens skill",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Port from ui-kit. Sync Figma CSS variable values into token files. Requires Figma MCP + API access."
+  },
+  {
+    "id": "DS-116",
+    "title": "Create /sync-icons skill",
+    "phase": "post-mvp1",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Port from ui-kit. Sync icon SVGs from Figma API. Additive only — never removes existing icons."
   }
 ]

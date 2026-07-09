@@ -286,6 +286,7 @@
     <button class="filter-btn" data-filter="5">Phase 5</button>
     <button class="filter-btn" data-filter="6">Phase 6</button>
     <button class="filter-btn" data-filter="ops">Ops</button>
+    <button class="filter-btn" data-filter="post-mvp1">Post-MVP1</button>
   </nav>
 </header>
 
@@ -323,6 +324,7 @@
   function getFilteredTasks() {
     if (currentFilter === 'all') return allTasks;
     if (currentFilter === 'ops') return allTasks.filter(function(t) { return !t.phase; });
+    if (currentFilter === 'post-mvp1') return allTasks.filter(function(t) { return t.phase === 'post-mvp1'; });
     return allTasks.filter(function(t) { return t.phase === parseInt(currentFilter); });
   }
 
@@ -341,6 +343,7 @@
       { label: 'Phase 5', tasks: allTasks.filter(function(t) { return t.phase === 5; }) },
       { label: 'Phase 6', tasks: allTasks.filter(function(t) { return t.phase === 6; }) },
       { label: 'Ops',     tasks: allTasks.filter(function(t) { return !t.phase; }) },
+      { label: 'Post-MVP1', tasks: allTasks.filter(function(t) { return t.phase === 'post-mvp1'; }) },
     ];
 
     statsEl.innerHTML = '';
@@ -361,7 +364,7 @@
   function makeCard(task) {
     var card = document.createElement('div');
     card.className = 'card';
-    var phaseLabel = task.phase ? 'P' + task.phase : 'Ops';
+    var phaseLabel = !task.phase ? 'Ops' : (typeof task.phase === 'number' ? 'P' + task.phase : task.phase.toUpperCase());
     var notes = task.notes
       ? '<p class="card-notes">' + task.notes + '</p>'
       : '';

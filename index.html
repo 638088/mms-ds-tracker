@@ -74,6 +74,11 @@
       color: var(--c-text-subtle);
     }
 
+    .phase-stat-excluded {
+      opacity: 0.5;
+      font-style: italic;
+    }
+
     .phase-stat-label {
       font-weight: 600;
       min-width: 54px;
@@ -271,10 +276,7 @@
 <header id="header">
   <div id="title-row">
     <h1>DS Platform <span class="subtitle">Task Tracker</span></h1>
-    <div style="display: flex; gap: 16px; align-items: center;">
-      <span id="last-published" style="font-size: 11px; color: var(--c-text-subtle);">Last published: 2026-07-09</span>
-      <span id="total-stat"></span>
-    </div>
+    <span id="total-stat"></span>
   </div>
   <div id="phase-stats"></div>
   <nav id="phase-filter">
@@ -286,7 +288,7 @@
     <button class="filter-btn" data-filter="5">Phase 5</button>
     <button class="filter-btn" data-filter="6">Phase 6</button>
     <button class="filter-btn" data-filter="ops">Ops</button>
-    <button class="filter-btn" data-filter="post-mvp1">Post-MVP1</button>
+    <button class="filter-btn" data-filter="post-mvp1">Post MVP1</button>
   </nav>
 </header>
 
@@ -331,9 +333,11 @@
   function renderStats() {
     var statsEl = document.getElementById('phase-stats');
     var totalEl = document.getElementById('total-stat');
-    var done = allTasks.filter(function(t) { return t.status === 'done'; }).length;
-    var pct  = Math.round((done / allTasks.length) * 100);
-    totalEl.textContent = done + '/' + allTasks.length + ' tasks (' + pct + '%)';
+    // Exclude post-mvp1 tasks from overall count
+    var activeTasks = allTasks.filter(function(t) { return t.phase !== 'post-mvp1'; });
+    var done = activeTasks.filter(function(t) { return t.status === 'done'; }).length;
+    var pct  = Math.round((done / activeTasks.length) * 100);
+    totalEl.textContent = done + '/' + activeTasks.length + ' tasks (' + pct + '%)';
 
     var groups = [
       { label: 'Phase 1', tasks: allTasks.filter(function(t) { return t.phase === 1; }) },
@@ -343,7 +347,7 @@
       { label: 'Phase 5', tasks: allTasks.filter(function(t) { return t.phase === 5; }) },
       { label: 'Phase 6', tasks: allTasks.filter(function(t) { return t.phase === 6; }) },
       { label: 'Ops',     tasks: allTasks.filter(function(t) { return !t.phase; }) },
-      { label: 'Post-MVP1', tasks: allTasks.filter(function(t) { return t.phase === 'post-mvp1'; }) },
+      { label: 'Post MVP1', tasks: allTasks.filter(function(t) { return t.phase === 'post-mvp1'; }), excluded: true },
     ];
 
     statsEl.innerHTML = '';
@@ -352,9 +356,9 @@
       var done = g.tasks.filter(function(t) { return t.status === 'done'; }).length;
       var pct  = Math.round((done / g.tasks.length) * 100);
       var div  = document.createElement('div');
-      div.className = 'phase-stat';
+      div.className = 'phase-stat' + (g.excluded ? ' phase-stat-excluded' : '');
       div.innerHTML =
-        '<span class="phase-stat-label">' + g.label + '</span>' +
+        '<span class="phase-stat-label">' + g.label + (g.excluded ? ' *' : '') + '</span>' +
         '<span class="phase-stat-count">' + done + '/' + g.tasks.length + '</span>' +
         '<div class="phase-stat-bar"><div class="phase-stat-fill" style="width:' + pct + '%"></div></div>';
       statsEl.appendChild(div);
@@ -364,7 +368,7 @@
   function makeCard(task) {
     var card = document.createElement('div');
     card.className = 'card';
-    var phaseLabel = !task.phase ? 'Ops' : (typeof task.phase === 'number' ? 'P' + task.phase : task.phase.toUpperCase());
+    var phaseLabel = task.phase === 'post-mvp1' ? 'Post MVP1' : (task.phase ? 'P' + task.phase : 'Ops');
     var notes = task.notes
       ? '<p class="card-notes">' + task.notes + '</p>'
       : '';

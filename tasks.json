@@ -611,31 +611,49 @@
     "title": "Review and refactor spacing tokens (including naming consistency)",
     "phase": 2,
     "type": "build",
-    "status": "backlog",
-    "notes": "Audit spacing token scale for naming consistency (xs0/xs1/xs2 ordering, lg-mid outlier). Consider aligning with size token naming convention. Verify all values are used in component builds. Clean up Marina source comments once stabilized."
+    "status": "done",
+    "notes": "Audited spacing vs size token coverage against ui-kit. Added size-0 (0px) and size-lg-28 (28px) for full ui-kit migration parity. Confirmed 3px and 28px are legitimately used for both spacing (padding) and sizing (dimensions) — no cleanup needed. Fixed spacing description in Storybook."
   },
   {
     "id": "DS-104",
     "title": "Create border-width token scale",
     "phase": 2,
     "type": "build",
-    "status": "backlog",
-    "notes": "Define structural border-width tokens (hairline/thin/medium/thick). Audit Marina components for common border-width values. Add Storybook story at Foundations/Border Width. Distinct from size tokens — semantic purpose is stroke thickness, not element dimensions."
+    "status": "done",
+    "notes": "6 tokens matching ui-kit: none (0), xs (1px), sm (2px), md (3px), lg (4px), xl (6px). Storybook story at Foundations/Border Width."
   },
   {
     "id": "DS-105",
     "title": "Create disabled/interactive state tokens",
     "phase": 2,
     "type": "build",
-    "status": "backlog",
-    "notes": "Define structural tokens for component states: disabled opacity, hover/pressed color shifts, active/focus adjustments. May include interaction timing tokens. Foundation for Phase 3 component state styling consistency."
+    "status": "done",
+    "notes": "COMMITTED 2026-07-09 (7981eff).\n\n13 new semantic state tokens:\n- --color-action-solid-pressed (primary-11)\n- --color-surface-hover/active (neutral-3/4)\n- --color-surface-brand-hover/active (primary-3/4)\n- --color-border-focus, --color-input-border-focus (primary-8)\n- --color-input-border-error/success/caution (utility emphasis)\n- --color-input-surface-error/success/caution (utility muted)\n\nState Styling documentation rewritten with 6-section structure."
+  },
+  {
+    "id": "DS-108",
+    "title": "Refactor color token architecture for proper dark mode theming",
+    "phase": 2,
+    "type": "build",
+    "status": "done",
+    "priority": "high",
+    "blocks": ["DS-105"],
+    "notes": "READY FOR COMMIT 2026-07-09.\n\nARCHITECTURE IMPLEMENTED:\n\n1. Neutral primitives (shared, :root):\n   - tokens/primitives/color-neutral.json → --neutral-light-*, --neutral-dark-*\n\n2. Theme files (moved to tokens/themes/):\n   - tokens/themes/default.json — synced to match color-neutral.json\n   - tokens/themes/maximus.json, va-gov.json\n   - [data-theme='X'] aliases + [data-theme='X'][data-mode='dark'] dark mode\n\n3. Utility colors (structural):\n   - Success/error/caution — fixed hex\n   - Caution emphasis: #936f38 (USWDS warning-darker, 4.59:1 AA)\n   - Added --color-utility-on-fill (#ffffff)\n\n4. Informational (semantic):\n   - --color-utility-informational-* references --color-neutral-*\n   - Auto-swaps in dark mode\n\n5. Semantic typography (NEW):\n   - tokens/semantic/typography.json → 85 tokens\n   - --type-heading-*, --type-body-*, --type-ui-*, --type-code-*\n\nDOCS: docs/utility-colors.md\n\nUNBLOCKS: DS-105"
   },
   {
     "id": "DS-106",
     "title": "Revisit layout tokens: grid and column system",
     "phase": 2,
     "type": "build",
+    "status": "done",
+    "notes": "CLOSED AS WORKING AS DESIGNED (2026-07-08).\n\nOriginal concern: Marina has column/grid tokens; mms-ds-platform doesn't — flagged as potential gap.\n\nResolution: DS-008a deliberately removed grid/column tokens. The rationale (quoted from ticket notes): 'Original Marina-style breakpoints + 12-column grid was rejected because it doesn't match how AI generates page layouts.'\n\nThe adopted model:\n  • Container: max-width 1280px + margin-inline auto + padding-inline (16/24px)\n  • Gap tokens: tight/default/loose/comfortable (8/16/24/32px) for flex/grid gap\n  • Pattern primitives (DS-079): Stack, Cluster, Sidebar, Switcher, CardGrid — named patterns, not column counts\n\nThe Layout System Storybook story explicitly states: 'AI assistants generate this shape natively... Adopting AI's native shape as the design system contract — rather than fighting it — eliminates drift.'\n\nThis is a conscious architectural divergence from Marina, not an oversight. Multi-item layout needs are addressed by DS-079 (layout pattern recipes)."
+  },
+  {
+    "id": "DS-107",
+    "title": "Evaluate hover overlay tokens for edge cases",
+    "phase": 6,
+    "type": "build",
     "status": "backlog",
-    "notes": "Re-evaluate DS-008a decision to remove grid/column tokens. Consider hybrid approach: keep AI-native container model + add optional column grid tokens for designer alignment. Assess whether CardGrid pattern (DS-079) suffices or if explicit column counts are needed for complex layouts."
+    "notes": "CONTEXT (from DS-105 discussion 2026-07-08):\n\nTwo approaches to hover effects exist:\n\n1. STEP-SHIFTING (adopted) — Move to the next step in the 12-step scale. Button at step 9 → hover at step 10. Surface at step 3 → hover at step 4. This is what M3 and Tailwind use.\n\n2. OVERLAY (deferred) — Add semi-transparent black/white layer on top. ui-kit uses rgba(0,0,0,0.20) and rgba(255,255,255,0.20).\n\nWHY M3 DROPPED OVERLAYS (M2→M3 transition reasoning):\n  • Token integrity — overlays produce computed colors that aren't tokens, can't be referenced/themed/contrast-validated\n  • Accessibility predictability — overlays produce inconsistent results across the scale (20% black on step 3 vs step 9)\n  • Simpler implementation — step-shifting is just var(--color-primary-10)\n  • Design-code parity — Figma Variables can't express blend modes\n  • Dynamic theming — tonal palettes scale to arbitrary colors, overlays don't\n\nEDGE CASES WHERE OVERLAYS MAY BE NEEDED:\n  • Transparent/ghost elements on unknown backgrounds\n  • Dynamic colors from external sources (user-generated, CMS-injected)\n  • Interactive overlays on images\n\nDECISION: Start with step-shifting only (DS-105). Revisit overlays if edge cases arise in Phase 3 component builds.\n\nIF IMPLEMENTED:\n  --color-overlay-hover-light: rgba(255,255,255,0.20)  /* ui-kit value */\n  --color-overlay-hover-dark: rgba(0,0,0,0.20)         /* ui-kit value */"
   }
 ]

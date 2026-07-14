@@ -337,7 +337,8 @@
     var activeTasks = allTasks.filter(function(t) { return t.phase !== 'post-mvp1'; });
     var done = activeTasks.filter(function(t) { return t.status === 'done'; }).length;
     var pct  = Math.round((done / activeTasks.length) * 100);
-    totalEl.textContent = done + '/' + activeTasks.length + ' tasks (' + pct + '%)';
+    var today = new Date().toISOString().slice(0, 10);
+    totalEl.textContent = done + '/' + activeTasks.length + ' tasks (' + pct + '%)  ·  Updated ' + today;
 
     var groups = [
       { label: 'Phase 1', tasks: allTasks.filter(function(t) { return t.phase === 1; }) },

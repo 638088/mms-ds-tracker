@@ -333,9 +333,9 @@
     "id": "DS-047",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-button (Marina: primary-button, secondary-button, ghost-button — single component, variant prop)",
-    "notes": "One component, three variants via prop. Ghost: no label padding — dynamic padding per variant (standard: Shoelace, Spectrum). Marina markup reused, mms CSS applied."
+    "notes": "Merged PR #25 (2026-07-14). Props: variant (primary/secondary/ghost), size (sm/md/lg), roundness (boxed/subtle/rounded), state, disabled, label, leftIcon, rightIcon, colorScheme (primary/secondary/accent/onyx). 43 unit tests. Theme constraints enforce decorative color blocking."
   },
   {
     "id": "DS-067",

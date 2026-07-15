@@ -230,8 +230,8 @@
     "title": "Set up JFrog NPM registry for @mms/ package distribution",
     "phase": null,
     "type": "ops",
-    "status": "backlog",
-    "notes": "Decision (2026-07-02): JFrog is NOT pending approval — DevOps needs to execute the setup. This is a DevOps dependency, not an agent-actionable task. Track for handoff."
+    "status": "done",
+    "notes": "Decision (2026-07-02): JFrog is NOT pending approval — DevOps needs to execute the setup. This is a DevOps dependency, not an agent-actionable task. Track for handoff.\n\n2026-07-15: JFrog registry confirmed by DevOps at https://artifactory.mars.pcf-maximus.com/artifactory/mms-ds-platform/. Expanding scope to include full NPM package configuration: (1) package.json exports/files/entry points, (2) build pipeline scripts, (3) JFrog .npmrc + publishConfig, (4) Developer Guide in docs + Storybook.\n\nCommit 9a815f5: CI/CD workflows, build pipeline, changelog automation, DevOps handoff doc, Developer Guide, LICENSE.\n\nMerged in PR #26."
   },
   {
     "id": "DS-090",

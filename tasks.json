@@ -722,5 +722,37 @@
     "type": "governance",
     "status": "backlog",
     "notes": "Port from ui-kit. Sync icon SVGs from Figma API. Additive only — never removes existing icons."
+  },
+  {
+    "id": "DS-117",
+    "title": "Confirm JFrog NPM registry access and publish first package",
+    "phase": null,
+    "type": "ops",
+    "status": "in-progress",
+    "notes": "Follow-up on DS-089. Waiting on DevOps to configure: (1) internal read access for Maximus machines, (2) publish token for DS contributors. Once received, verify with `npm view` and publish @mms/design-system@0.10.0."
+  },
+  {
+    "id": "DS-118",
+    "title": "Adobe CC library connection for theme asset sharing",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Explore exporting theme packages (typography, colors, logo) to Adobe CC Libraries. Goal: shared design assets for both digital properties AND print projects. Research: (1) CC Libraries API, (2) Style Dictionary → CC export format, (3) automation potential."
+  },
+  {
+    "id": "DS-119",
+    "title": "Theme intake process — agentic brand theme creation",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Design an agentic workflow where a user fills out a form with brand specifications (colors, typography, logo) and triggers an automated process to generate a new @mms/theme-[client] package. Research: (1) intake form requirements, (2) validation rules (WCAG contrast), (3) token generation pipeline, (4) MCP tool integration."
+  },
+  {
+    "id": "DS-120",
+    "title": "Configure Figma MCP for design-code sync",
+    "phase": null,
+    "type": "ops",
+    "status": "backlog",
+    "notes": "Enable Figma MCP server in GitHub Copilot. Requires: (1) Maximus IT admin approval for enterprise Copilot policy, (2) Figma API token setup. Enables bidirectional design-code workflow — pull design context into code, push rendered UI back to Figma. Prerequisite for /sync-tokens (DS-115) and /sync-icons (DS-116)."
   }
 ]

@@ -337,7 +337,8 @@
     var activeTasks = allTasks.filter(function(t) { return t.phase !== 'post-mvp1'; });
     var done = activeTasks.filter(function(t) { return t.status === 'done'; }).length;
     var pct  = Math.round((done / activeTasks.length) * 100);
-    var today = new Date().toISOString().slice(0, 10);
+    var d = new Date();
+    var today = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
     totalEl.textContent = done + '/' + activeTasks.length + ' tasks (' + pct + '%)  ·  Updated ' + today;
 
     var groups = [

@@ -254,8 +254,8 @@
     "title": "Configure @mms/tokens-structural NPM package and publish via JFrog",
     "phase": null,
     "type": "ops",
-    "status": "blocked",
-    "notes": "Distribution only — packaging tokens-structural.css (built by DS-009) as an NPM package published via JFrog. Blocked on DevOps JFrog setup (DS-089). DS-009 handles the local CSS build; this handles consumer distribution."
+    "status": "removed",
+    "notes": "SUPERSEDED by DS-117. Tokens now bundled in @mms/design-system@0.11.0 and distributed via JFrog. Consumers import '@mms/design-system/tokens.css' or granular exports. Separate tokens-structural package unnecessary."
   },
   {
     "id": "DS-011",
@@ -263,15 +263,15 @@
     "phase": null,
     "type": "ops",
     "status": "blocked",
-    "notes": "Moved to Ops — Figma Variables output blocked on Figma MCP IT approval."
+    "notes": "Figma Variables output blocked on Figma MCP IT approval. When unblocked: add Figma Variables transform to style-dictionary.config.mjs for code→Figma token sync."
   },
   {
     "id": "DS-012",
     "title": "End-to-end token pipeline validation",
     "phase": null,
     "type": "ops",
-    "status": "backlog",
-    "notes": "Moved to Ops — E2E validation is an ops checkpoint after DS-003 (Style Dictionary) is complete."
+    "status": "done",
+    "notes": "Validated as part of DS-117. @mms/design-system@0.11.0 published with tokens, components, and React wrappers. Consumers verified via HTML and React test apps."
   },
   {
     "id": "DS-010",
@@ -341,17 +341,17 @@
     "id": "DS-067",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-icon-button (Marina: button + icon pattern)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Implemented as iconOnly prop on mms-button rather than separate component. Merged in PR #35."
   },
   {
     "id": "DS-027",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-link (Marina: text-link)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "mms-link component built with link-color prop. Marina markup reused, mms CSS applied. Merged in PR #35."
   },
   {
     "id": "DS-048",
@@ -728,8 +728,8 @@
     "title": "Confirm JFrog NPM registry access and publish first package",
     "phase": null,
     "type": "ops",
-    "status": "in-progress",
-    "notes": "Follow-up on DS-089. Waiting on DevOps to configure: (1) internal read access for Maximus machines, (2) publish token for DS contributors. Once received, verify with `npm view` and publish @mms/design-system@0.10.0."
+    "status": "done",
+    "notes": "First publish to JFrog completed (0.10.0). React wrappers (MmsButton, MmsIcon) added using @lit/react. CSS exports fixed for ESM bundlers. Docs updated with data-theme activation step. Merged in PR #33."
   },
   {
     "id": "DS-118",
@@ -744,8 +744,8 @@
     "title": "Theme intake process — agentic brand theme creation",
     "phase": null,
     "type": "ops",
-    "status": "backlog",
-    "notes": "Design an agentic workflow where a user fills out a form with brand specifications (colors, typography, logo) and triggers an automated process to generate a new @mms/theme-[client] package. Research: (1) intake form requirements, (2) validation rules (WCAG contrast), (3) token generation pipeline, (4) MCP tool integration."
+    "status": "done",
+    "notes": "Planning complete — see docs/ds-119-theme-intake-planning.md for full architecture, MCP tool specs, and flow diagrams. Implementation blocked on DS-121 (JFrog anonymous read). Merged in PR #35."
   },
   {
     "id": "DS-120",
@@ -754,5 +754,13 @@
     "type": "ops",
     "status": "backlog",
     "notes": "Enable Figma MCP server in GitHub Copilot. Requires: (1) Maximus IT admin approval for enterprise Copilot policy, (2) Figma API token setup. Enables bidirectional design-code workflow — pull design context into code, push rendered UI back to Figma. Prerequisite for /sync-tokens (DS-115) and /sync-icons (DS-116)."
+  },
+  {
+    "id": "DS-121",
+    "title": "JFrog anonymous read — enable seamless npm install",
+    "phase": null,
+    "type": "ops",
+    "status": "in-progress",
+    "notes": "BLOCKING DS ADOPTION. Current state: npm install returns 401, requiring npm login. Required state: any Maximus dev on VPN can npm install without credentials. Requires DevOps to configure: (1) Admin → Security → General → Enable 'Allow Anonymous Access', (2) Admin → Permissions → Add anonymous user with Read on mms-ds-platform. DevOps request sent 2026-07-16."
   }
 ]

@@ -365,25 +365,25 @@
     "id": "DS-051",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-checkbox (Marina: checkbox)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Single combined component (not split like Marina). Props: label, checked, indeterminate, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName, checkedValue. Pixel-perfect indicator positioning using fixed px values (not percentages). Per-color tokens for dark mode contrast. Storybook Overview + Playground stories complete. Merged in PR #45."
   },
   {
     "id": "DS-050",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-checkbox-group (Marina: checkbox-group)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Props: label, helperText, showTooltip, tooltipText, colorScheme, size, disabled, readonly, error, errorText, required, name. Group propagates colorScheme/size/disabled/readonly to slotted mms-checkbox children. Tooltip shell added (icon visible, dialog pending). Density support added. Checkbox required indicator shows on heading (fallback to label). Storybook Overview + Playground stories complete. 45 unit tests passing, 66 checkbox tests passing, all 5 test layers passed. Merged in PR #47."
   },
   {
     "id": "DS-049",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-radio (Marina: radio)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Radio component for single-selection within mms-radio-group. Props: label, selected, value, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName. Circle indicator with centered dot (sm=4px, md=6px, lg=8px). 4 color schemes, 3 sizes, selected/disabled/readonly/error states. Storybook Overview + Playground stories complete. 67 unit tests passing. Token validation + hardcoded audit passing. WCAG 1.4.11 neutral-7 fix included (3:1 contrast for form control borders). Checkbox/CheckboxGroup a11y docs added. Merged in PR #48."
   },
   {
     "id": "DS-052",
@@ -760,7 +760,23 @@
     "title": "JFrog anonymous read — enable seamless npm install",
     "phase": null,
     "type": "ops",
-    "status": "in-progress",
-    "notes": "BLOCKING DS ADOPTION. Current state: npm install returns 401, requiring npm login. Required state: any Maximus dev on VPN can npm install without credentials. Requires DevOps to configure: (1) Admin → Security → General → Enable 'Allow Anonymous Access', (2) Admin → Permissions → Add anonymous user with Read on mms-ds-platform. DevOps request sent 2026-07-16."
+    "status": "pending-review",
+    "notes": "REOPENED 2026-07-21. Peer reported install failure. Investigation: Anonymous access verified working (my original test was flawed — had auth token). Peer to run diagnostic 2026-07-22. See docs/ds-121-investigation-2026-07-21.md for full context. Storybook Installation guide updated with VPN + npmrc prerequisites."
+  },
+  {
+    "id": "DS-122",
+    "title": "Implement hard enforcement for workflow governance hooks",
+    "phase": null,
+    "type": "ops",
+    "status": "blocked",
+    "notes": "BLOCKED — Local hooks are bypassable. Agent can create approval flags itself (`touch /tmp/commit-approved && git commit`), defeating the guard. GitHub branch protection requires Pro ($4/mo) or org account — personal private repo cannot enable it.\n\nCURRENT STATE:\n- 13 governance rules documented in .github/copilot-instructions.md\n- Husky pre-commit/post-commit hooks installed\n- bin/gh and bin/git wrappers installed\n- Enforcement is instruction-based, not mechanical\n\nFUTURE UNBLOCK CONDITIONS:\n1. GitHub Pro or org account — enables branch protection (require PR, require review)\n2. Copilot enterprise policy change — enables chat.useHooks\n3. Claude Code adoption — supports mechanical hooks\n4. Model capability — future models may have built-in compliance tracking\n\nWORKAROUND: Explicit instruction patterns + immediate J callout on violation. See docs/hook-enforcement.md for full architecture."
+  },
+  {
+    "id": "DS-123",
+    "title": "Fix dark mode section headers in Storybook props table",
+    "phase": null,
+    "type": "bug",
+    "status": "done",
+    "notes": "Merged in PR #46. Section header rows (e.g., 'Core Interaction', 'Visual', 'Validation') in Storybook args table showed garbled/overlapping text in dark mode. Root cause: Dark mode CSS rule `button { color: #ffffff }` made screen-reader-only buttons visible, overlapping with category name spans. Fix: Added sr-only CSS rules for `tr[title^='Hide '] td button` and `tr[title^='Show '] td button` in .storybook/preview-body.html. Verified on Checkbox, Button, and Link Playground pages in both dark and light modes."
   }
 ]

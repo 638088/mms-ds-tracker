@@ -1,5 +1,12 @@
 [
   {
+    "id": "DS-124",
+    "title": "Hide Storybook addon panel by default",
+    "type": "ux",
+    "status": "done",
+    "notes": "Fixed using layoutCustomisations.showPanel() - Storybook 10 API. The addon panel (Controls, Actions, Interactions, Accessibility tabs) is now hidden by default. Users can toggle it on via toolbar if needed."
+  },
+  {
     "id": "DS-075",
     "title": "Install and configure Storybook shell",
     "type": "ops",
@@ -389,9 +396,9 @@
     "id": "DS-052",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-radio-group (Marina: radio-group)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Group wrapper for mms-radio elements with single-selection behavior and WAI-ARIA radio group pattern. Props: label, value, helperText, name, showTooltip, tooltipText, colorScheme, size, orientation (vertical/horizontal), disabled, readonly, error, errorText, required. Arrow key navigation with wrap-around. Change events with value detail. 54 unit tests + 14 a11y tests passing. Token validation + hardcoded audit passing. Storybook Overview + Playground stories complete. Sidebar ordering + label alignment fixes. Value prop default to empty. Merged PR #51."
   },
   {
     "id": "DS-053",
@@ -761,7 +768,7 @@
     "phase": null,
     "type": "ops",
     "status": "pending-review",
-    "notes": "REOPENED 2026-07-21. Peer reported install failure. Investigation: Anonymous access verified working (my original test was flawed — had auth token). Peer to run diagnostic 2026-07-22. See docs/ds-121-investigation-2026-07-21.md for full context. Storybook Installation guide updated with VPN + npmrc prerequisites."
+    "notes": "REOPENED 2026-07-21. Peer ran diagnostic 2026-07-22: curl 200 + npm E401 — suggests project-level .npmrc or env var with bad auth. Deeper diagnostic sent. May be working now. See docs/ds-121-investigation-2026-07-21.md."
   },
   {
     "id": "DS-122",

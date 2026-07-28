@@ -364,9 +364,9 @@
     "id": "DS-048",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-text-field (Marina: text-input, text-area)",
-    "notes": "text-field naming confirmed — not text-input (Marina-specific). Marina markup reused, mms CSS applied."
+    "notes": "text-field naming confirmed — not text-input (Marina-specific). Option B: separate text-field/text-area components. 26 props across Visual/Content/Mask/Form/Validation/Tooltip/Global categories. Masks: email, phone, currency, numeral, measurement, count, protected-field. Added --color-text-placeholder token (4.5:1+ AA). Placeholder darkens on hover. Icon controls changed to dropdowns. Merged in PR #57."
   },
   {
     "id": "DS-051",
@@ -398,15 +398,15 @@
     "type": "build",
     "status": "done",
     "title": "Build mms-radio-group (Marina: radio-group)",
-    "notes": "Group wrapper for mms-radio elements with single-selection behavior and WAI-ARIA radio group pattern. Props: label, value, helperText, name, showTooltip, tooltipText, colorScheme, size, orientation (vertical/horizontal), disabled, readonly, error, errorText, required. Arrow key navigation with wrap-around. Change events with value detail. 54 unit tests + 14 a11y tests passing. Token validation + hardcoded audit passing. Storybook Overview + Playground stories complete. Sidebar ordering + label alignment fixes. Value prop default to empty. Merged PR #51."
+    "notes": "Group wrapper for mms-radio elements with single-selection behavior and WAI-ARIA radio group pattern. Props: label, value, helperText, name, showTooltip, tooltipText, colorScheme, size, orientation (vertical/horizontal), disabled, readonly, error, errorText, required. Arrow key navigation with wrap-around. Change events with value detail. 54 unit tests passing. Token validation + hardcoded audit passing. Storybook Overview + Playground stories complete. PR #51 merged."
   },
   {
     "id": "DS-053",
     "phase": 3,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-select (Marina: select-choice)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Native <select> wrapper with WCAG 2.2 AA compliance. Redesigned neutral scales for border contrast. Comprehensive a11y documentation standard. PR #56 merged."
   },
   {
     "id": "DS-018",

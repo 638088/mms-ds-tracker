@@ -785,5 +785,21 @@
     "type": "bug",
     "status": "done",
     "notes": "Merged in PR #46. Section header rows (e.g., 'Core Interaction', 'Visual', 'Validation') in Storybook args table showed garbled/overlapping text in dark mode. Root cause: Dark mode CSS rule `button { color: #ffffff }` made screen-reader-only buttons visible, overlapping with category name spans. Fix: Added sr-only CSS rules for `tr[title^='Hide '] td button` and `tr[title^='Show '] td button` in .storybook/preview-body.html. Verified on Checkbox, Button, and Link Playground pages in both dark and light modes."
+  },
+  {
+    "id": "DS-125",
+    "title": "Enforce workflow discipline — no testing or code edits post-commit",
+    "phase": null,
+    "type": "ops",
+    "status": "done",
+    "notes": "Update skills to enforce: 1) Testing belongs in pre-commit phase only. 2) Post-commit = NO code edits. 3) /publish-npm should only build + publish, no tests. 4) If tests fail post-commit, STOP and report — do not fix. Merged in PR #59."
+  },
+  {
+    "id": "DS-126",
+    "title": "WCAG-compliant color palette tier system",
+    "phase": 1,
+    "type": "design",
+    "status": "done",
+    "notes": "Comprehensive 3-tier color palette classification model. Tier 1 (Full): All 12 steps for buttons, inputs, interactive components. Tier 2 (Text + Surface): Steps 1,2,9,11,12 for branded text and tinted backgrounds. Tier 3 (Decorative): Steps 1,2,9 for tinted surfaces and decorative fills only.\n\nDELIVERED:\n  • docs/color-palette-generation.md — Full specification with WCAG constraints, algorithm, and verification checklist\n  • .claude/skills/generate-palette/SKILL.md — 5-phase skill for generating WCAG-compliant palettes from anchor colors\n  • src/themes/maximus.css — Primary/Secondary Tier 1, Accent Tier 3 (steps 1,2,9 only)\n  • src/themes/va-gov.css — Primary Tier 1, Secondary Tier 3 (1,2,9), Accent Tier 2 (1,2,9,11,12)\n  • src/themes/*-dark.css — Matching tier classifications for dark mode\n  • src/stories/foundations/Colors.stories.ts — ColorTiering story added (dedicated documentation page explaining tier concept) + paletteTiers visibility logic\n  • scripts/contrast-audit.mjs — Tier-aware validation (296 checks pass, 0 failures)\n\nKEY DECISIONS:\n  • VA-Gov accent step-8 (#207068) was darker than step-9 anchor — fixed with #278979\n  • Maximus accent (2.23:1 vs white) and VA-Gov secondary (3.28:1) classified as Tier 3 (decorative only)\n  • VA-Gov accent tier 2: anchor 4.54:1 satisfies text contrast but visual gaps prevent full border scale\n  • Tier 3 fills exempt from WCAG 1.4.11 (UI contrast) — decorative use only\n\nAll 47 component tests pass. Palette is fully robust for Phase 2 component builds."
   }
 ]

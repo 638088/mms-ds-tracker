@@ -1,35 +1,5 @@
 [
   {
-    "id": "DS-124",
-    "title": "Hide Storybook addon panel by default",
-    "type": "ux",
-    "status": "done",
-    "notes": "Fixed using layoutCustomisations.showPanel() - Storybook 10 API. The addon panel (Controls, Actions, Interactions, Accessibility tabs) is now hidden by default. Users can toggle it on via toolbar if needed."
-  },
-  {
-    "id": "DS-075",
-    "title": "Install and configure Storybook shell",
-    "type": "ops",
-    "status": "done",
-    "notes": "Storybook 10 + Vite. Root package.json, tsconfig.json, .storybook/main.ts, .storybook/preview.ts, Introduction.stories.ts, and 36 placeholder stories across all 8 categories. Merged in PR #10."
-  },
-  {
-    "id": "DS-077",
-    "title": "Create spacing token documentation story",
-    "phase": 1,
-    "type": "build",
-    "status": "done",
-    "notes": "Spacing story built — renders 19-token scale with CSS custom property names and proportional bars. rem column and consumer-facing descriptions added. Merged in PR #10."
-  },
-  {
-    "id": "DS-076",
-    "title": "Create neutral color token documentation story",
-    "phase": 1,
-    "type": "build",
-    "status": "done",
-    "notes": "Colors story built and visually validated. Renders neutral primitive scale with CSS custom property names and swatches. Merged in PR #10."
-  },
-  {
     "id": "DS-001",
     "title": "Scaffold .claude/ directory, hooks, and CLAUDE.md",
     "type": "ops",
@@ -42,6 +12,14 @@
     "type": "ops",
     "status": "done",
     "notes": "Completed in feature/phase2-tracker (PR #2)."
+  },
+  {
+    "id": "DS-003",
+    "title": "Configure @mms/tokens-structural NPM package and publish via JFrog",
+    "phase": null,
+    "type": "ops",
+    "status": "removed",
+    "notes": "SUPERSEDED by DS-117. Tokens now bundled in @mms/design-system@0.11.0 and distributed via JFrog. Consumers import '@mms/design-system/tokens.css' or granular exports. Separate tokens-structural package unnecessary."
   },
   {
     "id": "DS-004",
@@ -116,6 +94,268 @@
     "notes": "5 structural tokens (width/style/color/offset/inset-offset). focusRing + focusRingInset shared CSSResult exports — first shared style primitive in the system. Storybook story at Foundations/Focus Ring/Focus Ring Tokens. Merged in PR #12."
   },
   {
+    "id": "DS-009",
+    "title": "Build tokens-structural.css via Style Dictionary (local build — no JFrog required)",
+    "phase": 2,
+    "type": "build",
+    "status": "done",
+    "notes": "Complete. Style Dictionary pipeline: structural → semantic → theme layers. 12-step OKLCH brand color scales (light + dark). Size token scale (18 tokens). Merged in PR #21."
+  },
+  {
+    "id": "DS-010",
+    "title": "Author default brand sheet (@mms/theme-default)",
+    "phase": 6,
+    "type": "design",
+    "status": "backlog",
+    "notes": "Moved to Phase 1 — default brand sheet is token definition work, not pipeline infrastructure."
+  },
+  {
+    "id": "DS-011",
+    "title": "Configure Figma Variables output in Style Dictionary",
+    "phase": null,
+    "type": "ops",
+    "status": "blocked",
+    "notes": "Figma Variables output blocked on Figma MCP IT approval. When unblocked: add Figma Variables transform to style-dictionary.config.mjs for code→Figma token sync."
+  },
+  {
+    "id": "DS-012",
+    "title": "End-to-end token pipeline validation",
+    "phase": null,
+    "type": "ops",
+    "status": "done",
+    "notes": "Validated as part of DS-117. @mms/design-system@0.11.0 published with tokens, components, and React wrappers. Consumers verified via HTML and React test apps."
+  },
+  {
+    "id": "DS-013",
+    "title": "Define component authoring skills and workflow",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "build-component.prompt.md — 6-phase workflow. Merged in PR #21."
+  },
+  {
+    "id": "DS-014",
+    "title": "Align on Storybook practice and story standards",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Contract at .github/contracts/storybook-standards.md + .claude/contracts/storybook-standards.md. Docs-only approach, single Default story, Global Props category, centered/fullscreen layout only."
+  },
+  {
+    "id": "DS-015",
+    "title": "Define accessibility audit workflow",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Absorbed into /test-component skill as Layer 2. WCAG 2.2 AA compliance. axe-core tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa."
+  },
+  {
+    "id": "DS-016",
+    "title": "Token strategy guide for ui-kit component porting",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Pivoted from mapping JSON to strategy guide at .claude/contracts/token-strategy.md. Semantic decision tree: Marina intent → mms token. Covers colors, spacing, radius, elevation, focus ring, typography, icons, motion."
+  },
+  {
+    "id": "DS-017",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-address — US address format (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last."
+  },
+  {
+    "id": "DS-018",
+    "phase": 3,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-alert-banner (Marina: alert-banner)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-023",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-modal (Marina: modal)",
+    "notes": "Marina markup reused, mms CSS applied. Merged in PR #76."
+  },
+  {
+    "id": "DS-024",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-spinner (Marina: inline-spinner, page-spinner — size/context variants)",
+    "notes": "Two Marina sources combined into one component with size/context variants."
+  },
+  {
+    "id": "DS-026",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-notification (Marina: TBD — confirm source component)",
+    "notes": "In Storybook as Feedback/Notification. Confirm Marina source mapping before building."
+  },
+  {
+    "id": "DS-027",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-link (Marina: text-link)",
+    "notes": "mms-link component built with link-color prop. Marina markup reused, mms CSS applied. Merged in PR #35."
+  },
+  {
+    "id": "DS-030",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-tooltip (Marina: tooltip)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-031",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-skip-link — Section 508 bypass block (net-new, government-specific)",
+    "notes": "Net-new. No Marina equivalent. Work on these last (J confirmed 2026-07-02)."
+  },
+  {
+    "id": "DS-032",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-toggle (Marina: toggle)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-047",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-button (Marina: primary-button, secondary-button, ghost-button — single component, variant prop)",
+    "notes": "Merged PR #25 (2026-07-14). Props: variant (primary/secondary/ghost), size (sm/md/lg), roundness (boxed/subtle/rounded), state, disabled, label, leftIcon, rightIcon, colorScheme (primary/secondary/accent/onyx). 43 unit tests. Theme constraints enforce decorative color blocking."
+  },
+  {
+    "id": "DS-048",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-text-field (Marina: text-input, text-area)",
+    "notes": "text-field naming confirmed — not text-input (Marina-specific). Option B: separate text-field/text-area components. 26 props across Visual/Content/Mask/Form/Validation/Tooltip/Global categories. Masks: email, phone, currency, numeral, measurement, count, protected-field. Added --color-text-placeholder token (4.5:1+ AA). Placeholder darkens on hover. Icon controls changed to dropdowns. Merged in PR #57."
+  },
+  {
+    "id": "DS-049",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-radio (Marina: radio)",
+    "notes": "Radio component for single-selection within mms-radio-group. Props: label, selected, value, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName. Circle indicator with centered dot (sm=4px, md=6px, lg=8px). 4 color schemes, 3 sizes, selected/disabled/readonly/error states. Storybook Overview + Playground stories complete. 67 unit tests passing. Token validation + hardcoded audit passing. WCAG 1.4.11 neutral-7 fix included (3:1 contrast for form control borders). Checkbox/CheckboxGroup a11y docs added. Merged in PR #48."
+  },
+  {
+    "id": "DS-050",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-checkbox-group (Marina: checkbox-group)",
+    "notes": "Props: label, helperText, showTooltip, tooltipText, colorScheme, size, disabled, readonly, error, errorText, required, name. Group propagates colorScheme/size/disabled/readonly to slotted mms-checkbox children. Tooltip shell added (icon visible, dialog pending). Density support added. Checkbox required indicator shows on heading (fallback to label). Storybook Overview + Playground stories complete. 45 unit tests passing, 66 checkbox tests passing, all 5 test layers passed. Merged in PR #47."
+  },
+  {
+    "id": "DS-051",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-checkbox (Marina: checkbox)",
+    "notes": "Single combined component (not split like Marina). Props: label, checked, indeterminate, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName, checkedValue. Pixel-perfect indicator positioning using fixed px values (not percentages). Per-color tokens for dark mode contrast. Storybook Overview + Playground stories complete. Merged in PR #45."
+  },
+  {
+    "id": "DS-052",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-radio-group (Marina: radio-group)",
+    "notes": "Group wrapper for mms-radio elements with single-selection behavior and WAI-ARIA radio group pattern. Props: label, value, helperText, name, showTooltip, tooltipText, colorScheme, size, orientation (vertical/horizontal), disabled, readonly, error, errorText, required. Arrow key navigation with wrap-around. Change events with value detail. 54 unit tests passing. Token validation + hardcoded audit passing. Storybook Overview + Playground stories complete. PR #51 merged."
+  },
+  {
+    "id": "DS-053",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-select (Marina: select-choice)",
+    "notes": "Native <select> wrapper with WCAG 2.2 AA compliance. Redesigned neutral scales for border contrast. Comprehensive a11y documentation standard. PR #56 merged."
+  },
+  {
+    "id": "DS-054",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-progress-bar (Marina: progress-bar — determinate)",
+    "notes": "Determinate progress only. See mms-loading-bar (Phase 5) for indeterminate."
+  },
+  {
+    "id": "DS-059",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-accordion (Marina: accordion, accordion-item)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-060",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-tabs (Marina: tabs, tabs-item)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-061",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-breadcrumbs (Marina: breadcrumb)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-063",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-stepper (Marina: progress-tracker)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-066",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-header (Marina: header)",
+    "notes": "Marina markup reused, mms CSS applied."
+  },
+  {
+    "id": "DS-067",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "title": "Build mms-icon-button (Marina: button + icon pattern)",
+    "notes": "Implemented as iconOnly prop on mms-button rather than separate component. Merged in PR #35."
+  },
+  {
+    "id": "DS-068",
+    "title": "Migrate Ladle playground to mms-ds-platform and publish via GitHub Pages",
+    "type": "ops",
+    "status": "done",
+    "notes": "Playground migrated to mms-ds-platform/playground/ in PR #5. @dxhub/core and @dxhub/shared vendored under playground/vendor/. GitHub Pages not viable (private repo). Hosting pending DevOps S3 deployment."
+  },
+  {
+    "id": "DS-069",
+    "title": "Deploy Ladle playground to S3 static hosting",
+    "type": "ops",
+    "status": "done",
+    "notes": "Deployed at https://monorepo.non-prod.dxhub.maximus.com/ — DevOps provisioned S3 bucket."
+  },
+  {
     "id": "DS-070",
     "title": "Author /list-commits skill — plain-English view of all in-flight work",
     "type": "ops",
@@ -151,18 +391,27 @@
     "notes": "violation-guard stripped to: rm-rf guard, force-push guard, write-to-dxhub-web-monorepo guard. protect-branches: removed git checkout main block — only blocks direct commits and pushes to main."
   },
   {
-    "id": "DS-069",
-    "title": "Deploy Ladle playground to S3 static hosting",
+    "id": "DS-075",
+    "title": "Install and configure Storybook shell",
     "type": "ops",
     "status": "done",
-    "notes": "Deployed at https://monorepo.non-prod.dxhub.maximus.com/ — DevOps provisioned S3 bucket."
+    "notes": "Storybook 10 + Vite. Root package.json, tsconfig.json, .storybook/main.ts, .storybook/preview.ts, Introduction.stories.ts, and 36 placeholder stories across all 8 categories. Merged in PR #10."
   },
   {
-    "id": "DS-068",
-    "title": "Migrate Ladle playground to mms-ds-platform and publish via GitHub Pages",
-    "type": "ops",
+    "id": "DS-076",
+    "title": "Create neutral color token documentation story",
+    "phase": 1,
+    "type": "build",
     "status": "done",
-    "notes": "Playground migrated to mms-ds-platform/playground/ in PR #5. @dxhub/core and @dxhub/shared vendored under playground/vendor/. GitHub Pages not viable (private repo). Hosting pending DevOps S3 deployment."
+    "notes": "Colors story built and visually validated. Renders neutral primitive scale with CSS custom property names and swatches. Merged in PR #10."
+  },
+  {
+    "id": "DS-077",
+    "title": "Create spacing token documentation story",
+    "phase": 1,
+    "type": "build",
+    "status": "done",
+    "notes": "Spacing story built — renders 19-token scale with CSS custom property names and proportional bars. rem column and consumer-facing descriptions added. Merged in PR #10."
   },
   {
     "id": "DS-078",
@@ -172,12 +421,41 @@
     "notes": "Layout System page (DS-008a) establishes a normalized inline typography scale grounded in WCAG 2.2 AA legibility (16px body floor, 14px aux floor, 1.6 line-height body, 1.35 headings, prose capped at ~68ch, opacity ≤ 0.7 on text, no thin weights, mono via ui-monospace). Apply the same scale across every page in Storybook — Introduction (MDX), all Foundations stories (Colors, Spacing, Radius, Elevation, Layout, future Type / Motion / Focus Ring / etc.), and all current and future component stories. Goal is uniform rhythm and accessibility floors across the entire documentation surface. Replace ad-hoc rem values with the shared `t` scale defined in Layout.stories.ts. Note: this is an interim normalization; when DS-006 (type scale) lands the `t` object is the single swap-out point to migrate every page to real typography tokens at once."
   },
   {
+    "id": "DS-079",
+    "title": "Define layout pattern recipes and card-min-width token",
+    "type": "build",
+    "status": "backlog",
+    "notes": "The container model (DS-008a) defines the page-level shape — centered max-width container with internal padding. What it doesn't define is how multiple items arrange WITHIN the container. Without column grid concepts, we need a named, finite set of layout pattern recipes that AI generates natively and that map 1:1 to Figma component names. Add to tokens/structural/layout.json (or a new tokens/structural/layout-patterns.json):\n\n  • --layout-card-min-width: 280px — minimum card width threshold for repeat(auto-fill, minmax(...)) grids;     determines when a card grid wraps to fewer columns. AI defaults to ~280px naturally.\n\nAdd a new Storybook page (Foundations → Layout Patterns) documenting five recipes, each with reference CSS and Figma equivalent:\n\n  1. Stack — vertical with gap. flex column + gap.\n  2. Cluster — horizontal wrap with gap. flex row + flex-wrap + gap.\n  3. Sidebar — fixed-width sidebar + flex content. grid-template-columns or flex with basis.\n  4. Switcher — row above a threshold, column below. flex-wrap + flex-basis trick (no media query).\n  5. CardGrid — auto-fill minmax(--layout-card-min-width, 1fr).\n\nEach recipe gets a CSS class name (.ds-stack, .ds-cluster, etc.) intended to be mirrored as a Figma auto-layout component preset. The naming is the contract: designers pick a Figma component named 'Stack', AI writes a div with class 'ds-stack', they produce the same output. Patterns are based on Every Layout (every-layout.dev) primitives."
+  },
+  {
+    "id": "DS-080",
+    "title": "Add section composition pattern + vertical section padding tokens",
+    "type": "build",
+    "status": "backlog",
+    "notes": "DS-008a defined the inner container model (centered max-width + horizontal padding). The model is incomplete for real page composition because AI builds pages as stacked full-bleed sections, each containing a centered container with vertical padding-block. Adding the section pattern closes this gap.\n\nTOKENS (add to tokens/structural/layout.json):\n  • --layout-section-padding-compact: 48px — padding-block at smaller viewports (below the padding step). Aliases --spacing-xl2.\n  • --layout-section-padding-default: 96px — padding-block at the padding step and above. Aliases --spacing-xxl3.\n  • Step transitions at --layout-padding-step (768px), same boundary as horizontal padding for consistency.\n\nREFERENCE CSS PATTERN documented on the Layout System page:\n  .layout-section { padding-block: var(--layout-section-padding-compact); }\n  @media (min-width: 768px) { .layout-section { padding-block: var(--layout-section-padding-default); } }\n  .layout-section > .layout-container { ... } /* nested container handles horizontal */\n\nPAGE UPDATE — Foundations → Layout → Layout System:\n  • Restructure into two stacked sub-sections: 'Container' (existing content) and 'Section composition' (new).\n  • Expand Layout Tokens table to include the new --layout-section-padding-* values.\n  • Add a second visualization showing stacked sections with their padding-block at 375 and 1440.\n  • Update Reference CSS to show the full section + container composition pattern AI produces.\n  • Update Tip — Figma frame strategy to mention designing full-height stacked sections, not just the container.\n\nRATIONALE: Container and section are the same architectural concern — page composition. Keeping them on one page preserves the unified mental model that matches how AI actually generates code.\n\n2026-06-22 — Section vertical rhythm was initially attempted in DS-008a as `--layout-gap-section: 48px` (categorized as a 'gap' token). Pulled back because it conflates two different concerns: inline `gap` (CSS gap property, spacing between siblings inside a flex/grid container) vs section vertical rhythm (CSS `padding-block` on the section, or `margin-block` between sections). AI's mental model matches this split — `gap-2/4/6/8` for inline, `py-12/24` or `space-y-16` for section rhythm. This ticket owns the section side properly: define `--layout-section-padding-compact` and `--layout-section-padding-default` as `padding-block` tokens applied to section wrappers, NOT as gap tokens."
+  },
+  {
+    "id": "DS-081",
+    "title": "Define breakpoint token scale (component-level) — decide between Marina-inspired and AI-aligned",
+    "type": "build",
+    "status": "backlog",
+    "notes": "DS-008a removed the breakpoints section from the Layout System page because breakpoints no longer drive container margins (container uses max-width + auto-centering instead). But AI still writes media queries at conventional breakpoints for component-level responsive behavior — type scaling, layout pattern shifts (CardGrid columns, Switcher threshold), nav collapse, etc. The DS needs a sanctioned breakpoint scale or AI will improvise.\n\nDECISION REQUIRED — pick a scale:\n\n  Option A (Marina-inspired):  375 / 768 / 1024 / 1440 / 1920\n    Pros: matches Marina, matches typical Figma frame sizes (1440 = designer default), preserves prior decisions.\n    Cons: 1440 sits awkwardly against the 1280 container cap. AI doesn't naturally produce 1440 / 1920 media queries.\n\n  Option B (Tailwind / AI-native):  640 / 768 / 1024 / 1280 / 1536\n    Pros: Aligns with AI defaults (Tailwind is the most common framework AI generates). 1280 matches the container cap.\n    Cons: Deviates from Marina precedent. 1440 (designer convention) is not in the scale.\n\n  Option C (Hybrid):  375 / 768 / 1024 / 1280 / 1536  — keeps 375 (mobile design anchor) and 1280 (container cap),\n    drops 1440/1920 in favor of AI-native Tailwind values for the largest steps.\n\nSCOPE WHEN DECIDED:\n  • Update tokens/structural/layout.json with chosen breakpoint scale (replacing the existing five-breakpoint set).\n  • Restore a 'Breakpoints' section to the Layout System Storybook page, scoped to component-level responsive use.\n    Make it clear the scale does NOT drive container margins (the container model is breakpoint-agnostic except for\n    the padding step at 768).\n  • Document which breakpoints AI writes naturally vs. which are design-side anchors only.\n  • Audit prior tickets / decisions for any references to the old 375/768/1024/1440/1920 scale that need updating."
+  },
+  {
     "id": "DS-082",
     "title": "Define iconography system — icon library, size tokens, Storybook gallery",
     "phase": 1,
     "type": "build",
     "status": "done",
     "notes": "mms-icon Lit component with Phosphor registry (1,458 icons × 6 weights). Size tokens (sm/md/lg/xl). Storybook gallery with live search and copy-to-clipboard. MDX Playground docs pattern established. Merged in PR #13."
+  },
+  {
+    "id": "DS-083",
+    "title": "Define unit testing infrastructure (Vitest + axe-core + token integrity)",
+    "phase": 2,
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged PR #23 (2026-07-09). Vitest + Playwright + axe-core. validate-tokens.mjs and audit-hardcoded-values.mjs. Dual-format skills (.agent.md + SKILL.md) for /build-component, /test-component, /commit, /pr-create, /pr-merge."
   },
   {
     "id": "DS-084",
@@ -212,25 +490,12 @@
     "notes": "12-step Radix color scales for primary/secondary palettes. Light and dark mode palettes. Maximus brand colors corrected to Pantone Violet #502E91. Dynamic hexcode column in token tables. Anchor step (9) indicator in scale visualizations. Merged in PR #13."
   },
   {
-    "id": "DS-079",
-    "title": "Define layout pattern recipes and card-min-width token",
+    "id": "DS-088",
+    "title": "Add Brand Themes section to Storybook with per-client style guides",
+    "phase": 6,
     "type": "build",
     "status": "backlog",
-    "notes": "The container model (DS-008a) defines the page-level shape — centered max-width container with internal padding. What it doesn't define is how multiple items arrange WITHIN the container. Without column grid concepts, we need a named, finite set of layout pattern recipes that AI generates natively and that map 1:1 to Figma component names. Add to tokens/structural/layout.json (or a new tokens/structural/layout-patterns.json):\n\n  • --layout-card-min-width: 280px — minimum card width threshold for repeat(auto-fill, minmax(...)) grids;     determines when a card grid wraps to fewer columns. AI defaults to ~280px naturally.\n\nAdd a new Storybook page (Foundations → Layout Patterns) documenting five recipes, each with reference CSS and Figma equivalent:\n\n  1. Stack — vertical with gap. flex column + gap.\n  2. Cluster — horizontal wrap with gap. flex row + flex-wrap + gap.\n  3. Sidebar — fixed-width sidebar + flex content. grid-template-columns or flex with basis.\n  4. Switcher — row above a threshold, column below. flex-wrap + flex-basis trick (no media query).\n  5. CardGrid — auto-fill minmax(--layout-card-min-width, 1fr).\n\nEach recipe gets a CSS class name (.ds-stack, .ds-cluster, etc.) intended to be mirrored as a Figma auto-layout component preset. The naming is the contract: designers pick a Figma component named 'Stack', AI writes a div with class 'ds-stack', they produce the same output. Patterns are based on Every Layout (every-layout.dev) primitives."
-  },
-  {
-    "id": "DS-080",
-    "title": "Add section composition pattern + vertical section padding tokens",
-    "type": "build",
-    "status": "backlog",
-    "notes": "DS-008a defined the inner container model (centered max-width + horizontal padding). The model is incomplete for real page composition because AI builds pages as stacked full-bleed sections, each containing a centered container with vertical padding-block. Adding the section pattern closes this gap.\n\nTOKENS (add to tokens/structural/layout.json):\n  • --layout-section-padding-compact: 48px — padding-block at smaller viewports (below the padding step). Aliases --spacing-xl2.\n  • --layout-section-padding-default: 96px — padding-block at the padding step and above. Aliases --spacing-xxl3.\n  • Step transitions at --layout-padding-step (768px), same boundary as horizontal padding for consistency.\n\nREFERENCE CSS PATTERN documented on the Layout System page:\n  .layout-section { padding-block: var(--layout-section-padding-compact); }\n  @media (min-width: 768px) { .layout-section { padding-block: var(--layout-section-padding-default); } }\n  .layout-section > .layout-container { ... } /* nested container handles horizontal */\n\nPAGE UPDATE — Foundations → Layout → Layout System:\n  • Restructure into two stacked sub-sections: 'Container' (existing content) and 'Section composition' (new).\n  • Expand Layout Tokens table to include the new --layout-section-padding-* values.\n  • Add a second visualization showing stacked sections with their padding-block at 375 and 1440.\n  • Update Reference CSS to show the full section + container composition pattern AI produces.\n  • Update Tip — Figma frame strategy to mention designing full-height stacked sections, not just the container.\n\nRATIONALE: Container and section are the same architectural concern — page composition. Keeping them on one page preserves the unified mental model that matches how AI actually generates code.\n\n2026-06-22 — Section vertical rhythm was initially attempted in DS-008a as `--layout-gap-section: 48px` (categorized as a 'gap' token). Pulled back because it conflates two different concerns: inline `gap` (CSS gap property, spacing between siblings inside a flex/grid container) vs section vertical rhythm (CSS `padding-block` on the section, or `margin-block` between sections). AI's mental model matches this split — `gap-2/4/6/8` for inline, `py-12/24` or `space-y-16` for section rhythm. This ticket owns the section side properly: define `--layout-section-padding-compact` and `--layout-section-padding-default` as `padding-block` tokens applied to section wrappers, NOT as gap tokens."
-  },
-  {
-    "id": "DS-081",
-    "title": "Define breakpoint token scale (component-level) — decide between Marina-inspired and AI-aligned",
-    "type": "build",
-    "status": "backlog",
-    "notes": "DS-008a removed the breakpoints section from the Layout System page because breakpoints no longer drive container margins (container uses max-width + auto-centering instead). But AI still writes media queries at conventional breakpoints for component-level responsive behavior — type scaling, layout pattern shifts (CardGrid columns, Switcher threshold), nav collapse, etc. The DS needs a sanctioned breakpoint scale or AI will improvise.\n\nDECISION REQUIRED — pick a scale:\n\n  Option A (Marina-inspired):  375 / 768 / 1024 / 1440 / 1920\n    Pros: matches Marina, matches typical Figma frame sizes (1440 = designer default), preserves prior decisions.\n    Cons: 1440 sits awkwardly against the 1280 container cap. AI doesn't naturally produce 1440 / 1920 media queries.\n\n  Option B (Tailwind / AI-native):  640 / 768 / 1024 / 1280 / 1536\n    Pros: Aligns with AI defaults (Tailwind is the most common framework AI generates). 1280 matches the container cap.\n    Cons: Deviates from Marina precedent. 1440 (designer convention) is not in the scale.\n\n  Option C (Hybrid):  375 / 768 / 1024 / 1280 / 1536  — keeps 375 (mobile design anchor) and 1280 (container cap),\n    drops 1440/1920 in favor of AI-native Tailwind values for the largest steps.\n\nSCOPE WHEN DECIDED:\n  • Update tokens/structural/layout.json with chosen breakpoint scale (replacing the existing five-breakpoint set).\n  • Restore a 'Breakpoints' section to the Layout System Storybook page, scoped to component-level responsive use.\n    Make it clear the scale does NOT drive container margins (the container model is breakpoint-agnostic except for\n    the padding step at 768).\n  • Document which breakpoints AI writes naturally vs. which are design-side anchors only.\n  • Audit prior tickets / decisions for any references to the old 375/768/1024/1440/1920 scale that need updating."
+    "notes": "Moved to Phase 1 — Brand Themes Storybook documents Phase 1 token work."
   },
   {
     "id": "DS-089",
@@ -257,220 +522,12 @@
     "notes": "Decision (2026-07-02): Distribution pipeline (CSS, React binding, Salesforce, AEM, Drupal) to be tracked under Ops given DevOps dependencies. JFrog registry is prerequisite. Break into sub-tickets once JFrog is active."
   },
   {
-    "id": "DS-003",
-    "title": "Configure @mms/tokens-structural NPM package and publish via JFrog",
-    "phase": null,
-    "type": "ops",
-    "status": "removed",
-    "notes": "SUPERSEDED by DS-117. Tokens now bundled in @mms/design-system@0.11.0 and distributed via JFrog. Consumers import '@mms/design-system/tokens.css' or granular exports. Separate tokens-structural package unnecessary."
-  },
-  {
-    "id": "DS-011",
-    "title": "Configure Figma Variables output in Style Dictionary",
-    "phase": null,
-    "type": "ops",
-    "status": "blocked",
-    "notes": "Figma Variables output blocked on Figma MCP IT approval. When unblocked: add Figma Variables transform to style-dictionary.config.mjs for code→Figma token sync."
-  },
-  {
-    "id": "DS-012",
-    "title": "End-to-end token pipeline validation",
-    "phase": null,
-    "type": "ops",
-    "status": "done",
-    "notes": "Validated as part of DS-117. @mms/design-system@0.11.0 published with tokens, components, and React wrappers. Consumers verified via HTML and React test apps."
-  },
-  {
-    "id": "DS-010",
-    "title": "Author default brand sheet (@mms/theme-default)",
-    "phase": 6,
-    "type": "design",
-    "status": "backlog",
-    "notes": "Moved to Phase 1 — default brand sheet is token definition work, not pipeline infrastructure."
-  },
-  {
-    "id": "DS-088",
-    "title": "Add Brand Themes section to Storybook with per-client style guides",
-    "phase": 6,
-    "type": "build",
-    "status": "backlog",
-    "notes": "Moved to Phase 1 — Brand Themes Storybook documents Phase 1 token work."
-  },
-  {
-    "id": "DS-013",
-    "title": "Define component authoring skills and workflow",
-    "phase": 2,
-    "type": "governance",
-    "status": "done",
-    "notes": "build-component.prompt.md — 6-phase workflow. Merged in PR #21."
-  },
-  {
-    "id": "DS-014",
-    "title": "Align on Storybook practice and story standards",
-    "phase": 2,
-    "type": "governance",
-    "status": "done",
-    "notes": "Merged PR #23 (2026-07-09). Contract at .github/contracts/storybook-standards.md + .claude/contracts/storybook-standards.md. Docs-only approach, single Default story, Global Props category, centered/fullscreen layout only."
-  },
-  {
-    "id": "DS-015",
-    "title": "Define accessibility audit workflow",
-    "phase": 2,
-    "type": "governance",
-    "status": "done",
-    "notes": "Merged PR #23 (2026-07-09). Absorbed into /test-component skill as Layer 2. WCAG 2.2 AA compliance. axe-core tags: wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa."
-  },
-  {
-    "id": "DS-016",
-    "title": "Token strategy guide for ui-kit component porting",
-    "phase": 2,
-    "type": "governance",
-    "status": "done",
-    "notes": "Merged PR #23 (2026-07-09). Pivoted from mapping JSON to strategy guide at .claude/contracts/token-strategy.md. Semantic decision tree: Marina intent → mms token. Covers colors, spacing, radius, elevation, focus ring, typography, icons, motion."
-  },
-  {
-    "id": "DS-083",
-    "title": "Define unit testing infrastructure (Vitest + axe-core + token integrity)",
-    "phase": 2,
-    "type": "governance",
-    "status": "done",
-    "notes": "Merged PR #23 (2026-07-09). Vitest + Playwright + axe-core. validate-tokens.mjs and audit-hardcoded-values.mjs. Dual-format skills (.agent.md + SKILL.md) for /build-component, /test-component, /commit, /pr-create, /pr-merge."
-  },
-  {
-    "id": "DS-047",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-button (Marina: primary-button, secondary-button, ghost-button — single component, variant prop)",
-    "notes": "Merged PR #25 (2026-07-14). Props: variant (primary/secondary/ghost), size (sm/md/lg), roundness (boxed/subtle/rounded), state, disabled, label, leftIcon, rightIcon, colorScheme (primary/secondary/accent/onyx). 43 unit tests. Theme constraints enforce decorative color blocking."
-  },
-  {
-    "id": "DS-067",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-icon-button (Marina: button + icon pattern)",
-    "notes": "Implemented as iconOnly prop on mms-button rather than separate component. Merged in PR #35."
-  },
-  {
-    "id": "DS-027",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-link (Marina: text-link)",
-    "notes": "mms-link component built with link-color prop. Marina markup reused, mms CSS applied. Merged in PR #35."
-  },
-  {
-    "id": "DS-048",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-text-field (Marina: text-input, text-area)",
-    "notes": "text-field naming confirmed — not text-input (Marina-specific). Option B: separate text-field/text-area components. 26 props across Visual/Content/Mask/Form/Validation/Tooltip/Global categories. Masks: email, phone, currency, numeral, measurement, count, protected-field. Added --color-text-placeholder token (4.5:1+ AA). Placeholder darkens on hover. Icon controls changed to dropdowns. Merged in PR #57."
-  },
-  {
-    "id": "DS-051",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-checkbox (Marina: checkbox)",
-    "notes": "Single combined component (not split like Marina). Props: label, checked, indeterminate, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName, checkedValue. Pixel-perfect indicator positioning using fixed px values (not percentages). Per-color tokens for dark mode contrast. Storybook Overview + Playground stories complete. Merged in PR #45."
-  },
-  {
-    "id": "DS-050",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-checkbox-group (Marina: checkbox-group)",
-    "notes": "Props: label, helperText, showTooltip, tooltipText, colorScheme, size, disabled, readonly, error, errorText, required, name. Group propagates colorScheme/size/disabled/readonly to slotted mms-checkbox children. Tooltip shell added (icon visible, dialog pending). Density support added. Checkbox required indicator shows on heading (fallback to label). Storybook Overview + Playground stories complete. 45 unit tests passing, 66 checkbox tests passing, all 5 test layers passed. Merged in PR #47."
-  },
-  {
-    "id": "DS-049",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-radio (Marina: radio)",
-    "notes": "Radio component for single-selection within mms-radio-group. Props: label, selected, value, colorScheme, size, state, readonly, disabled, error, errorText, required, heading, helperText, fieldName. Circle indicator with centered dot (sm=4px, md=6px, lg=8px). 4 color schemes, 3 sizes, selected/disabled/readonly/error states. Storybook Overview + Playground stories complete. 67 unit tests passing. Token validation + hardcoded audit passing. WCAG 1.4.11 neutral-7 fix included (3:1 contrast for form control borders). Checkbox/CheckboxGroup a11y docs added. Merged in PR #48."
-  },
-  {
-    "id": "DS-052",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-radio-group (Marina: radio-group)",
-    "notes": "Group wrapper for mms-radio elements with single-selection behavior and WAI-ARIA radio group pattern. Props: label, value, helperText, name, showTooltip, tooltipText, colorScheme, size, orientation (vertical/horizontal), disabled, readonly, error, errorText, required. Arrow key navigation with wrap-around. Change events with value detail. 54 unit tests passing. Token validation + hardcoded audit passing. Storybook Overview + Playground stories complete. PR #51 merged."
-  },
-  {
-    "id": "DS-053",
-    "phase": 3,
-    "type": "build",
-    "status": "done",
-    "title": "Build mms-select (Marina: select-choice)",
-    "notes": "Native <select> wrapper with WCAG 2.2 AA compliance. Redesigned neutral scales for border contrast. Comprehensive a11y documentation standard. PR #56 merged."
-  },
-  {
-    "id": "DS-018",
-    "phase": 3,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-alert-banner (Marina: alert-banner)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-023",
-    "phase": 3,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-modal (Marina: modal)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-032",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-toggle (Marina: toggle)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-059",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-accordion (Marina: accordion, accordion-item)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
     "id": "DS-092",
     "phase": 4,
     "type": "build",
     "status": "backlog",
     "title": "Build mms-card (Marina: card)",
     "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-060",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-tabs (Marina: tabs, tabs-item)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-030",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-tooltip (Marina: tooltip)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-097",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-hero (Marina: hero, hero-image)",
-    "notes": "J confirmed 2026-07-02: Marina had hero components, include them. mms-promo-block dropped — mms-hero covers the need."
   },
   {
     "id": "DS-093",
@@ -481,35 +538,11 @@
     "notes": "Marina markup reused, mms CSS applied."
   },
   {
-    "id": "DS-026",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-notification (Marina: TBD — confirm source component)",
-    "notes": "In Storybook as Feedback/Notification. Confirm Marina source mapping before building."
-  },
-  {
     "id": "DS-094",
     "phase": 4,
     "type": "build",
     "status": "backlog",
     "title": "Build mms-toast (Marina: toast)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-061",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-breadcrumbs (Marina: breadcrumb)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-066",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-header (Marina: header)",
     "notes": "Marina markup reused, mms CSS applied."
   },
   {
@@ -529,44 +562,12 @@
     "notes": "Marina markup reused, mms CSS applied."
   },
   {
-    "id": "DS-063",
+    "id": "DS-097",
     "phase": 4,
     "type": "build",
     "status": "backlog",
-    "title": "Build mms-stepper (Marina: progress-tracker)",
-    "notes": "Marina markup reused, mms CSS applied."
-  },
-  {
-    "id": "DS-024",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-spinner (Marina: inline-spinner, page-spinner — size/context variants)",
-    "notes": "Two Marina sources combined into one component with size/context variants."
-  },
-  {
-    "id": "DS-054",
-    "phase": 4,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-progress-bar (Marina: progress-bar — determinate)",
-    "notes": "Determinate progress only. See mms-loading-bar (Phase 5) for indeterminate."
-  },
-  {
-    "id": "DS-031",
-    "phase": 5,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-skip-link — Section 508 bypass block (net-new, government-specific)",
-    "notes": "Net-new. No Marina equivalent. Work on these last (J confirmed 2026-07-02)."
-  },
-  {
-    "id": "DS-017",
-    "phase": 5,
-    "type": "build",
-    "status": "backlog",
-    "title": "Build mms-address — US address format (net-new, government-specific)",
-    "notes": "Net-new. No Marina equivalent. Work on these last."
+    "title": "Build mms-hero (Marina: hero, hero-image)",
+    "notes": "J confirmed 2026-07-02: Marina had hero components, include them. mms-promo-block dropped — mms-hero covers the need."
   },
   {
     "id": "DS-098",
@@ -601,14 +602,6 @@
     "notes": "Live at https://638088.github.io/mms-ds-tracker/. publish-tracker.prompt.md updated."
   },
   {
-    "id": "DS-009",
-    "title": "Build tokens-structural.css via Style Dictionary (local build — no JFrog required)",
-    "phase": 2,
-    "type": "build",
-    "status": "done",
-    "notes": "Complete. Style Dictionary pipeline: structural → semantic → theme layers. 12-step OKLCH brand color scales (light + dark). Size token scale (18 tokens). Merged in PR #21."
-  },
-  {
     "id": "DS-102",
     "title": "Define Global Props strategy (theme + density)",
     "phase": 2,
@@ -641,16 +634,6 @@
     "notes": "COMMITTED 2026-07-09 (7981eff).\n\n13 new semantic state tokens:\n- --color-action-solid-pressed (primary-11)\n- --color-surface-hover/active (neutral-3/4)\n- --color-surface-brand-hover/active (primary-3/4)\n- --color-border-focus, --color-input-border-focus (primary-8)\n- --color-input-border-error/success/caution (utility emphasis)\n- --color-input-surface-error/success/caution (utility muted)\n\nState Styling documentation rewritten with 6-section structure."
   },
   {
-    "id": "DS-108",
-    "title": "Refactor color token architecture for proper dark mode theming",
-    "phase": 2,
-    "type": "build",
-    "status": "done",
-    "priority": "high",
-    "blocks": ["DS-105"],
-    "notes": "READY FOR COMMIT 2026-07-09.\n\nARCHITECTURE IMPLEMENTED:\n\n1. Neutral primitives (shared, :root):\n   - tokens/primitives/color-neutral.json → --neutral-light-*, --neutral-dark-*\n\n2. Theme files (moved to tokens/themes/):\n   - tokens/themes/default.json — synced to match color-neutral.json\n   - tokens/themes/maximus.json, va-gov.json\n   - [data-theme='X'] aliases + [data-theme='X'][data-mode='dark'] dark mode\n\n3. Utility colors (structural):\n   - Success/error/caution — fixed hex\n   - Caution emphasis: #936f38 (USWDS warning-darker, 4.59:1 AA)\n   - Added --color-utility-on-fill (#ffffff)\n\n4. Informational (semantic):\n   - --color-utility-informational-* references --color-neutral-*\n   - Auto-swaps in dark mode\n\n5. Semantic typography (NEW):\n   - tokens/semantic/typography.json → 85 tokens\n   - --type-heading-*, --type-body-*, --type-ui-*, --type-code-*\n\nDOCS: docs/utility-colors.md\n\nUNBLOCKS: DS-105"
-  },
-  {
     "id": "DS-106",
     "title": "Revisit layout tokens: grid and column system",
     "phase": 2,
@@ -665,6 +648,18 @@
     "type": "build",
     "status": "backlog",
     "notes": "CONTEXT (from DS-105 discussion 2026-07-08):\n\nTwo approaches to hover effects exist:\n\n1. STEP-SHIFTING (adopted) — Move to the next step in the 12-step scale. Button at step 9 → hover at step 10. Surface at step 3 → hover at step 4. This is what M3 and Tailwind use.\n\n2. OVERLAY (deferred) — Add semi-transparent black/white layer on top. ui-kit uses rgba(0,0,0,0.20) and rgba(255,255,255,0.20).\n\nWHY M3 DROPPED OVERLAYS (M2→M3 transition reasoning):\n  • Token integrity — overlays produce computed colors that aren't tokens, can't be referenced/themed/contrast-validated\n  • Accessibility predictability — overlays produce inconsistent results across the scale (20% black on step 3 vs step 9)\n  • Simpler implementation — step-shifting is just var(--color-primary-10)\n  • Design-code parity — Figma Variables can't express blend modes\n  • Dynamic theming — tonal palettes scale to arbitrary colors, overlays don't\n\nEDGE CASES WHERE OVERLAYS MAY BE NEEDED:\n  • Transparent/ghost elements on unknown backgrounds\n  • Dynamic colors from external sources (user-generated, CMS-injected)\n  • Interactive overlays on images\n\nDECISION: Start with step-shifting only (DS-105). Revisit overlays if edge cases arise in Phase 3 component builds.\n\nIF IMPLEMENTED:\n  --color-overlay-hover-light: rgba(255,255,255,0.20)  /* ui-kit value */\n  --color-overlay-hover-dark: rgba(0,0,0,0.20)         /* ui-kit value */"
+  },
+  {
+    "id": "DS-108",
+    "title": "Refactor color token architecture for proper dark mode theming",
+    "phase": 2,
+    "type": "build",
+    "status": "done",
+    "priority": "high",
+    "blocks": [
+      "DS-105"
+    ],
+    "notes": "READY FOR COMMIT 2026-07-09.\n\nARCHITECTURE IMPLEMENTED:\n\n1. Neutral primitives (shared, :root):\n   - tokens/primitives/color-neutral.json → --neutral-light-*, --neutral-dark-*\n\n2. Theme files (moved to tokens/themes/):\n   - tokens/themes/default.json — synced to match color-neutral.json\n   - tokens/themes/maximus.json, va-gov.json\n   - [data-theme='X'] aliases + [data-theme='X'][data-mode='dark'] dark mode\n\n3. Utility colors (structural):\n   - Success/error/caution — fixed hex\n   - Caution emphasis: #936f38 (USWDS warning-darker, 4.59:1 AA)\n   - Added --color-utility-on-fill (#ffffff)\n\n4. Informational (semantic):\n   - --color-utility-informational-* references --color-neutral-*\n   - Auto-swaps in dark mode\n\n5. Semantic typography (NEW):\n   - tokens/semantic/typography.json → 85 tokens\n   - --type-heading-*, --type-body-*, --type-ui-*, --type-code-*\n\nDOCS: docs/utility-colors.md\n\nUNBLOCKS: DS-105"
   },
   {
     "id": "DS-109",
@@ -787,6 +782,13 @@
     "notes": "Merged in PR #46. Section header rows (e.g., 'Core Interaction', 'Visual', 'Validation') in Storybook args table showed garbled/overlapping text in dark mode. Root cause: Dark mode CSS rule `button { color: #ffffff }` made screen-reader-only buttons visible, overlapping with category name spans. Fix: Added sr-only CSS rules for `tr[title^='Hide '] td button` and `tr[title^='Show '] td button` in .storybook/preview-body.html. Verified on Checkbox, Button, and Link Playground pages in both dark and light modes."
   },
   {
+    "id": "DS-124",
+    "title": "Hide Storybook addon panel by default",
+    "type": "ux",
+    "status": "done",
+    "notes": "Fixed using layoutCustomisations.showPanel() - Storybook 10 API. The addon panel (Controls, Actions, Interactions, Accessibility tabs) is now hidden by default. Users can toggle it on via toolbar if needed."
+  },
+  {
     "id": "DS-125",
     "title": "Enforce workflow discipline — no testing or code edits post-commit",
     "phase": null,
@@ -801,5 +803,121 @@
     "type": "design",
     "status": "done",
     "notes": "Comprehensive 3-tier color palette classification model. Tier 1 (Full): All 12 steps for buttons, inputs, interactive components. Tier 2 (Text + Surface): Steps 1,2,9,11,12 for branded text and tinted backgrounds. Tier 3 (Decorative): Steps 1,2,9 for tinted surfaces and decorative fills only.\n\nDELIVERED:\n  • docs/color-palette-generation.md — Full specification with WCAG constraints, algorithm, and verification checklist\n  • .claude/skills/generate-palette/SKILL.md — 5-phase skill for generating WCAG-compliant palettes from anchor colors\n  • src/themes/maximus.css — Primary/Secondary Tier 1, Accent Tier 3 (steps 1,2,9 only)\n  • src/themes/va-gov.css — Primary Tier 1, Secondary Tier 3 (1,2,9), Accent Tier 2 (1,2,9,11,12)\n  • src/themes/*-dark.css — Matching tier classifications for dark mode\n  • src/stories/foundations/Colors.stories.ts — ColorTiering story added (dedicated documentation page explaining tier concept) + paletteTiers visibility logic\n  • scripts/contrast-audit.mjs — Tier-aware validation (296 checks pass, 0 failures)\n\nKEY DECISIONS:\n  • VA-Gov accent step-8 (#207068) was darker than step-9 anchor — fixed with #278979\n  • Maximus accent (2.23:1 vs white) and VA-Gov secondary (3.28:1) classified as Tier 3 (decorative only)\n  • VA-Gov accent tier 2: anchor 4.54:1 satisfies text contrast but visual gaps prevent full border scale\n  • Tier 3 fills exempt from WCAG 1.4.11 (UI contrast) — decorative use only\n\nAll 47 component tests pass. Palette is fully robust for Phase 2 component builds."
+  },
+  {
+    "id": "DS-127",
+    "title": "Build mms-text-area component",
+    "phase": 3,
+    "type": "build",
+    "status": "done",
+    "notes": "Multi-line text input component. Follow Marina text-area patterns. Props: rows (clamped min 2 / max 15), maxLength, resize behavior, character counter. Validation states: error, required, disabled, readonly. Size variants consistent with text-field. Component built, Storybook story complete. Post-review fixes: min-height floor so resize-drag cannot shrink below rows count, --mms-ta-rows custom property wired to visibly affect rendered height, Playground helperText default cleared. Fixed missing src/index.ts barrel export (import/class-export/type-export) — component was buildable via subpath import but not via the package root. All 6 test layers passing (33 unit, 18 a11y, tokens, hardcoded, storybook build, keyboard nav). | Also fixed (folded in, tangential): mms-text-field Playground story alignment — its custom decorator lacked the centering wrapper used by TextArea/Select. Corrected the wrapper to the shared pattern (flex justify-content:center, width:320px matching Select) rather than removing the width constraint; verified via Playwright element-level measurement that TextField now renders identically centered/sized to Select (320px) and TextArea (400px) within the docs canvas. | Follow-up correction: the centering fix above initially copied TextArea/Select's full wrapper including min-height:200px, which added ~170px of unneeded dead space below TextField's much shorter single-line content vs. production. Simplified to just add display:flex;justify-content:center to the original padding:2rem wrapper (no min-height/align-items borrowed) — canvas height now matches production (142px) with centering fixed. | Extended the min-height removal fix to mms-text-area and mms-select (DS-053, done/PR #56) Playground decorators as well, at J's request: both had the same borrowed min-height:200px/align-items:flex-start pattern. Removed from both, keeping only display:flex;justify-content:center;padding:1.5rem 2rem — canvas height now purely content+padding driven for all three form components (TextField 142px, TextArea 174px, Select 147px), all centered at their respective widths (320/320/400... text-field 320, select 320, text-area 400). | Merged in PR #72."
+  },
+  {
+    "id": "DS-128",
+    "title": "Investigate a11y test instability — radio-group/select/text-field timeouts",
+    "phase": null,
+    "type": "bug",
+    "status": "done",
+    "priority": "high",
+    "notes": "INVESTIGATION COMPLETE: Could not reproduce original failure — tests passed consistently in 3 runs. Added observability: (1) 1 retry locally for transient failures, (2) trace on all retries, (3) video on first retry. If failure recurs, artifacts will be in test-results/playwright/. Root cause remains unknown — likely transient (resource exhaustion, port conflict, or timing). Close as 'cannot reproduce' with observability in place."
+  },
+  {
+    "id": "DS-129",
+    "title": ".claude / .github workflow parity — close remaining gaps",
+    "type": "governance",
+    "status": "done",
+    "notes": "Full findings: docs/ds-129-github-claude-parity-gaps-2026-07-31.md. Remaining items: (1) add missing theme-constraints.ts step to .claude/skills/generate-palette/SKILL.md Phase 5 (reverse gap — .github has it, .claude doesn't); (2) bring .github/agents/commit.agent.md, pr-create.agent.md, pr-merge.agent.md up to parity with the rewritten .claude/skills/commit|pr-create|pr-merge/SKILL.md — .github's commit.agent.md uses `git add -A` which violates the no-add-A rule — deferred, J does not want .github cleaned up too much. (3) FIXED 2026-07-31: .claude/skills/commit/SKILL.md Gates 3c/3d now call npm run validate:tokens / audit:hardcoded; stale phantom-script note removed. (4) FIXED 2026-07-31, REVISED 2026-07-31: approval-flag double-consumption race remediated via a two-invocation-surface architecture, not by deleting hooks outright. Root cause: PreToolUse hooks only ever fire for Kai's own Bash-tool calls (Claude Code's mechanism); bin/gh and bin/git PATH wrappers only fire for J's manual interactive-terminal commands (direnv's shell hook is interactive-shell-only, so it never engages in Claude Code's non-interactive Bash tool shell — confirmed empirically via `which git`/`which gh` resolving to system binaries in that shell). An earlier pass deleted commit-guard.sh/pr-create-guard.sh/pr-merge-guard.sh on the mistaken assumption bin/gh and bin/git reliably intercepted Kai's own commands too — they don't, so pr-create-approved/pr-merge-approved/force-push-approved had zero real enforcement for Kai after that deletion. Final fix: pr-create-guard.sh and pr-merge-guard.sh recreated as PreToolUse hooks (Kai's sole enforcement surface, anchored gh-command regex); violation-guard.sh's force-push check restored (Kai's sole surface there); bin/gh and bin/git remain untouched as J's separate manual-terminal surface — one consumer per surface, no shared-flag race. commit-approved needed no such fix (husky is invoker-agnostic, fires on real `git commit` regardless of shell). Also fixed a genuine PreToolUse-timing bug found while restoring pr-merge-guard.sh: the hook fires before the Bash tool's command string executes anything, so a chained `touch && gh pr merge && rm -f` would always self-block; .claude/skills/pr-merge/SKILL.md Gate 3 now runs `touch` as its own separate, already-completed Bash call first. Separately, tracker-status-guard.sh (PreToolUse Write/Edit) and .husky/pre-commit's tracker check were rewritten to validate only NEWLY-transitioning tickets (staged/incoming status vs. on-disk/HEAD status) instead of revalidating every committed/done entry on every touch — live simulation against real tracker data proved the old full-file approach permanently blocked 7 existing tickets (DS-001, DS-002, DS-072, DS-073, DS-086, DS-087, DS-106) whose commit messages never literally cited their ticket ID. Also fixed a word-boundary bug in the ticket-ID-in-git-log match (bare substring risked 'DS-129' matching inside 'DS-1290'; now `\bDS-129\b`). Re-validated via live simulation against real tracker.json and git log data: zero false blocks on the 7 previously-broken tickets, genuine bad transitions still correctly blocked, word-boundary collision confirmed fixed. See docs/ds-129-github-claude-parity-gaps-2026-07-31.md § 4 for full detail. Items (1) and (2) remain backlog. Merged in PR #62."
+  },
+  {
+    "id": "DS-130",
+    "title": "protect-branches.sh blocks all direct-to-main pushes, even allowlisted tracker/session-log files",
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged in PR #64. Discovered 2026-08-03 while finishing /pr-merge Gate 5 for PR #63: the commit-guard section of .claude/hooks/protect-branches.sh has an ALLOWED_PATTERNS carve-out for tracker/session-log/docs files committed directly to main (matches CLAUDE.md §8's documented allowlist), but the push-guard section (git push origin main) has no such carve-out — it blocks the push unconditionally, with no flag and no allowlist check. Net effect: /pr-merge Gate 5's own documented workflow (commit tracker/tasks.json update directly to main) produces a commit Kai can never push. Fix: give the push-guard section the same allowlist check as the commit-guard section — diff local main against origin/main, and only block if the diverging commits touch files outside the allowlist. Deferred, unrelated issue tracked separately as the next ticket: /commit Gate 6 never re-touches /tmp/commit-approved before its second (tracker-status) commit."
+  },
+  {
+    "id": "DS-131",
+    "title": "tracker-status-guard.sh Edit-tool ticket-ID correlation fails for the first array entry",
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged in PR #64. Discovered 2026-08-03 while running Gate 6 of /commit for DS-130: bumping DS-130's status from pending-review to committed via the Edit tool was BLOCKED with 'could not identify the ticket ID', even though a commit referencing DS-130 (8f4ec5c) already existed in git history. Root cause: .claude/hooks/tracker-status-guard.sh's Edit-tool branch correlates a status change to a ticket ID by finding old_string's start position in the on-disk file and then searching for the nearest preceding \"id\" field in the text BEFORE that position. When old_string itself begins with the ticket's own \"id\" line (a common pattern for making old_string uniquely matchable, and exactly what /commit Gate 6 does), the search region ends before that id field, so it's never found. This silently fails for any ticket sitting at the START of the tracker/tasks.json array (or more precisely, any edit whose old_string opens with its own id field and has no other ticket id before it in the remaining region) — DS-130 was the first array element after being inserted ahead of DS-129, so it tripped this exact case. Fix: search old_string itself for an \"id\" field first (the common and most reliable signal) and only fall back to the preceding-text lookback if old_string doesn't contain one. Verified by tracing the exact DS-130 Gate 6 Edit call against the fixed logic by hand and via a standalone python re-implementation using the real on-disk tracker/tasks.json and the real old_string/new_string from the failed call — correctly resolves to DS-130 and to the correct old_status (pending-review), where it previously resolved to no ticket_id at all."
+  },
+  {
+    "id": "DS-132",
+    "title": "/commit Gate 6, /pr-merge Gate 2 (conflict resolution), and /pr-merge Gate 5 never re-touch /tmp/commit-approved before their commits",
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged in PR #64. Deferred from DS-130's own notes as 'the next ticket'; hit for real 2026-08-03 while executing Gate 6 for DS-130. .husky/pre-commit's commit-guard section unconditionally requires /tmp/commit-approved for every git commit and deletes it once all checks pass. .claude/skills/commit/SKILL.md Gate 5 creates the flag, runs the feature commit, then removes it. Gate 6 then runs a SECOND git commit (chore(tracker): mark DS-XXX committed) with no flag-touch step of its own, so husky blocks it — the flag from Gate 5 is already gone. Same defect found in .claude/skills/pr-merge/SKILL.md Gate 5 (chore(tracker): mark DS-XXX done post PR #N) — Gate 3's merge only touches /tmp/pr-merge-approved (a different flag/hook, for gh pr merge), never /tmp/commit-approved, so its own tracker-status commit was equally unguarded against husky's requirement. A full audit of every skill's git commit / touch-rm-f patterns (grep across .claude/skills/*/SKILL.md plus settings.json PreToolUse registrations) found a third instance: pr-merge/SKILL.md Gate 2's merge-conflict-resolution commit (git commit -m \"fix: resolve merge conflicts\") also had no flag touch. J confirmed (2026-08-03) the intended design: keep Gate 2's conflict resolution scripted/autonomous as written — CLAUDE.md's 'discussion with J, not autonomous action' language covers Kai consulting J when a REAL conflict arises, not a mandate to rewrite the skill into a stop-and-ask flow; mechanical flag-touch consistency is all that's needed here. All three commits are part of the SAME J-approved skill invocation in each case, so re-touching the flag completes already-granted approval rather than authorizing anything new. Fix: added touch /tmp/commit-approved immediately before each of these three commits and rm -f immediately after, mirroring the pattern already used around the primary commit in each skill. Audit confirmed no other duplicate-PreToolUse-consumer or missing-flag-retouch instances remain across commit/pr-create/pr-merge."
+  },
+  {
+    "id": "DS-133",
+    "title": "/pr-merge Gate 5 never pushes the tracker 'done' commit to origin main",
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged in PR #65. Discovered 2026-08-03 while running /pr-merge Gate 4 for PR #64: local main had an unpushed commit d6fa38a (chore(tracker): mark DS-129 done post PR #62) not present in origin/main's history, causing a divergent-branches error on git pull. Root cause: .claude/skills/pr-merge/SKILL.md Gate 5 documents git add / git commit for the tracker done-status update but never includes a git push origin main step, so the commit stays local-only until something else happens to push main. Verified zero data loss (d6fa38a's content was byte-for-byte already subsumed into PR #64's squash commit) before resolving the immediate divergence with git reset --hard origin/main. Fix: add an explicit git push origin main step to Gate 5, immediately after the tracker commit, inside the same touch/rm -f flag-guarded block."
+  },
+  {
+    "id": "DS-134",
+    "title": "Permission model enhancement — intent-driven allowlist, block inline python scripts",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "Implementation guide: .claude/memory/permission-model-enhancement-2026-08-03.md. Reduce permission prompts in 'Edit Automatically' mode via intent-based allowlist (read operations = safe, write scoped + guarded). Add read-only tools (jq, cd, pwd, etc.) to settings.json. Block inline python scripts (python3 -c) in violation-guard.sh to enforce engineering norm: use jq for JSON validation, not python. Python remains available for ad-hoc tasks (will prompt). Document engineering norms in CLAUDE.md § 5.6 and Key Decisions § 11. Audit existing skills for python usage, replace with jq. 5-step implementation plan with validation scenarios in handoff doc."
+  },
+  {
+    "id": "DS-135",
+    "title": "Governance system hardening — skills, contracts, hooks (commit fragmentation + full-lifecycle tracker automation + doc truth pass)",
+    "type": "governance",
+    "status": "done",
+    "notes": "PR1 merged in PR #66 (commit 2696ce5). PR2 (documentation truth pass) complete 2026-08-03: fixed 13→15 RULES header, corrected rules 7-9 enforcement column (PreToolUse hooks, not bin/gh/bin/git wrappers, with footnote clarifying the wrapper scope), corrected rules 10-12 (SessionStart/UserPromptSubmit hooks, not just Instruction), fixed rule 13 description (block-screenshot hard-blocks vs check-image-size resizes — were crossed), removed standalone commit-guard.sh references in CLAUDE.md/WORKFLOW.md, rewrote docs/hook-enforcement.md end-to-end (matrix + all downstream sections: Enforcement Layers, Gaps and Mitigations, Dual-Track Compatibility, File Locations, Testing, Honest Assessment, Future Unblock Conditions) to reflect Claude Code hooks as live/primary rather than dormant/future, added 3 missing contract rows to CLAUDE.md §7 (global-props.md, storybook-standards.md, token-strategy.md — storybook.md/storybook-standards.md overlap flagged to J, not resolved unilaterally), wired token-strategy.md + global-props.md into build-component/SKILL.md, fixed css-tokens.md false PreToolUse/PostToolUse claim (real mechanism is /commit Gates 3c/3d npm scripts), added Next:/commit handoffs to token-definition/SKILL.md + generate-palette/SKILL.md, added session-log step to build-component/SKILL.md Phase 7, added both skills to CLAUDE.md §8 chain table. .github/copilot-instructions.md synced byte-identical to CLAUDE.md. Final grep sweep confirmed no remaining stale 13-RULES/bin-wrapper/dormant-hooks/standalone-commit-guard.sh references outside historical incident-report docs (ds-129) which correctly describe past state, not current architecture. Merged in PR #70."
+  },
+  {
+    "id": "DS-136",
+    "title": "Tracker UX enhancements — Governance quick filter + expand/collapse notes",
+    "type": "ux",
+    "status": "done",
+    "notes": "Merged in PR #68. Two enhancements to tracker/index.html: (1) Added 'Governance' quick filter button between Ops and Post MVP1. Shows all tasks with type='governance'. Updated Ops filter to exclude governance tasks. Added Governance to phase stats display and card chip labels. (2) Added expand/collapse for task notes. Default: cards show only ID/tags/title/type, notes hidden. Cards with notes show ▼ chevron indicator, click to expand/collapse. Chevron rotates to ▲ when expanded. Keeps board scannable while preserving detail on-demand."
+  },
+  {
+    "id": "DS-137",
+    "title": "CI: skip full build/test pipeline for governance/ops-only changes + visible CI-wait status in /pr-merge",
+    "type": "governance",
+    "status": "done",
+    "notes": "Merged in PR #67. Part 1 (f40d8ee): CI paths-ignore for .claude/**, .github/memory/**, docs/**, tracker/** — governance/ops-only PRs now skip full build/test. Part 2 (Gate 3 CI-wait visibility, 1047af9) went through three failed live attempts on 2026-08-03 before landing on an honest design: CronCreate one-shot self-wake (jobs sat unfired past target time), background Agent + SendMessage(to: \"main\") (reached Kai's own context only, J confirmed nothing arrived on their side), and a blocking Bash poll loop (J still had to speak first). Conclusion, confirmed directly by J: this host has no push channel Kai can use to deliver unprompted updates to J's client, regardless of mechanism. Final Gate 3 in pr-merge/SKILL.md drops the autonomous-delivery claim entirely — reports status + realistic wait estimate, states plainly that J must check back, notes the re-check itself is instant. No loop/poll/cron in the shipped version. Also confirmed live during this PR's own CI wait: workflow-definition files (ci.yml) aren't covered by paths-ignore by GitHub Actions design, so a PR that itself introduces the skip rule can't benefit from it — expected, not a bug; future PRs touching only the ignored paths will skip full CI once this is on main."
+  },
+  {
+    "id": "DS-138",
+    "title": "Tracker: enforce mutually-exclusive lane classification (Governance/Ops overlap, build.cjs drift, Ppost-mvp1 label bug, removed-status stats leak)",
+    "type": "governance",
+    "status": "done",
+    "notes": "Lane rule (post-mvp1 > phase 1-6 > governance > ops) is now a strict partition in both tracker/index.html and tracker/build.cjs — a ticket can no longer double-count (e.g. DS-013, phase 2 + type governance, previously counted in both Phase 2 and Governance stats). Governance stays its own lane per J's confirmation it was carved out of a bloated Ops bucket; phase-tagged governance tickets (DS-013-016, 083, 102, 111) stay in their Phase since they were never part of that bloat. Also fixed: build.cjs was missing Phase 6 entirely from its stats bar, had no Governance/Post-MVP1 stat rows (silently folding DS-129-137 into Ops), rendered a literal broken 'Ppost-mvp1' phase-chip on DS-110/112-116 in every committed export, and used a different total-% denominator than the live tracker. DS-003 (status: removed) now excluded from all stat denominators in both renderers so a cancelled ticket can't permanently deflate a lane's completion %. Merged in PR #71."
+  },
+  {
+    "id": "DS-139",
+    "title": "/build-component: batch-load reference files in Phase 0 instead of re-reading per phase",
+    "type": "governance",
+    "status": "backlog",
+    "notes": "DS-127 (mms-text-area) build took longer than expected despite heavy prior art (ui-kit Marina source, mms-text-field similarity). Root cause wasn't skipping plan mode — build-component's phases are already fully prescribed, no architectural decision for J to weigh in on. Real cost was reference files getting rediscovered and re-read fresh at each phase instead of once up front: Marina source (Phase 1), a sibling story file e.g. Select.stories.ts (Phase 4), and a sibling unit-test + a11y-test + a11y-utils.ts trio (Phase 6), each read serially right before the phase that needed it. Proposed fix: add a '0E: Reference Batch-Load (parallel)' step to .claude/skills/build-component/SKILL.md Phase 0 that identifies and reads all of these up front in a single parallel batch, kept in context for the rest of the build rather than re-read later. Apply the same addition to .claude/skills/test-component/SKILL.md Phase 0 for its own reference reads (sibling .test.ts, .a11y.ts, a11y-utils.ts). Requires its own feature branch + PR (skill files are not on the direct-commit-to-main allowlist)."
+  },
+  {
+    "id": "DS-140",
+    "title": "Fix Skill Handoff Protocol wording — invocation is not scope approval",
+    "type": "governance",
+    "status": "done",
+    "notes": "CLAUDE.md/copilot-instructions.md Approval Flag Discipline + Skill Handoff Protocol sections said \"J invoking the skill IS their approval — proceed immediately,\" contradicting the /commit, /pr-create, /pr-merge skill files own explicit scope-review PAUSE gates. J flagged this as a real violation during DS-127 closeout (2026-08-04): invoking a skill authorizes running it, not approving the specific scope it then presents. Fix: reword both sync-partner files so the scope-review pause is explicit and non-skippable — flag creation happens only after J replies with explicit approval to the presented scope.\n\nScope expanded (2026-08-04): J asked to fold in a new governed `/rebase` skill, formalizing the manual multi-agent worktree-sync procedure this session hand-ran against the ds140 worktree itself (stash → fast-forward/rebase → generated-file conflict on tracker/tasks.json → regenerate). Standalone, J-only invocation — not a gate inside /commit. Primary trigger is /pr-merge Gate 8 suggesting /rebase for any other worktree left behind after a merge; /commit Gate 1 adds a non-blocking staleness nudge only. Added: .claude/skills/rebase/SKILL.md, .github/agents/rebase.agent.md. Edited: CLAUDE.md (§5.6 multi-agent-sync paragraph, §7 Governed Skills row, §8 Skill Chain row — §8 gate-ownership table intentionally untouched), WORKFLOW.md (post-table callout, Enforcement row for force-with-lease), pr-merge/SKILL.md Gate 8, commit/SKILL.md Gate 1, list-skills/SKILL.md. copilot-instructions.md mirrored byte-identical to CLAUDE.md (diff confirmed clean). Merged in PR #75."
+  },
+  {
+    "id": "DS-141",
+    "title": "Split tracker/tasks.json into per-ticket files; formalize worktree-per-ticket lifecycle",
+    "type": "governance",
+    "status": "done",
+    "notes": "Structural fix for DS-139 ID collision + accidental main commit: split tracker/tasks.json into tracker/tasks/DS-NNN.json (one file per ticket, tracker/tasks.json becomes a generated aggregate). Also formalizes one-git-worktree-per-ticket (mms-ds-platform-dsNNN), created at pickup, removed at PR merge. Merged in PR #73. REOPENED 2026-08-04: AC gap found post-merge — .claude/hooks/protect-branches.sh's ALLOWED_MAIN_PATTERN was never updated to allow tracker/tasks/*.json, blocking the very first post-merge tracker-status push. .husky/pre-commit and CLAUDE.md §8 were correctly updated; this hook (the third of three enforcement layers) was missed. Fixed and merged in PR #74."
+  },
+  {
+    "id": "DS-142",
+    "phase": 6,
+    "type": "build",
+    "status": "backlog",
+    "title": "mms-button: destructive/error colorScheme + fix nested-interactive WCAG violation",
+    "notes": "Two related mms-button fixes bundled as one ticket. Originally ticketed as DS-141 during the DS-023 session (2026-08-04), before that number was independently claimed by the tracker-restructuring ticket that merged to origin/main first (PR #73) — renumbered to DS-142 during /rebase sync (2026-08-05) to resolve the collision; no content change. (1) NOT YET BUILT: mms-modal's alertType prop currently fakes destructive-action styling via inline CSS custom-property overrides in _renderFooter() (destructiveSolidStyle/destructiveOutlineStyle) because mms-button has no destructive colorScheme of its own. Marina's equivalent buttons (primary-button, secondary-button, ghost-button) natively support alert-type='destructive' with dedicated render branches -- add the same to mms-button (native destructive/error variant on primary/secondary/ghost), then have mms-modal consume it via a real prop passthrough instead of inline style overrides. alertType/ModalAlertType was dropped from DS-023's mms-modal scope pending this ticket; re-add once this lands. (2) ALREADY FIXED (bundled on feature/ds-023-mms-modal, uncommitted): discovered during DS-023's /test-component axe run, mms-button set role=\"button\" tabindex=\"0\" on its own host while also rendering a native <button> in shadow DOM, producing a nested-interactive violation on every instance (system-wide, not modal-specific). Fixed by removing the host-level role/tabindex/keydown-handler entirely and setting static shadowRootOptions = { delegatesFocus: true } so the native shadow <button> is the sole focusable/interactive target. tests/modal.a11y.ts's nested-interactive exclusion removed now that the underlying defect is fixed. Ships alongside DS-023, pending J's review; ticket stays open/backlog until part (1) also lands."
   }
 ]

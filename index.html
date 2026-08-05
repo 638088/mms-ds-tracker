@@ -261,6 +261,27 @@
       margin: 7px 0 0;
       padding-top: 7px;
       border-top: 1px solid var(--c-border);
+      display: none;
+    }
+
+    .card.expanded .card-notes {
+      display: block;
+    }
+
+    .expand-indicator {
+      font-size: 9px;
+      color: var(--c-text-subtle);
+      margin-left: auto;
+      opacity: 0.6;
+      transition: transform 0.2s ease;
+    }
+
+    .card.expanded .expand-indicator {
+      transform: rotate(180deg);
+    }
+
+    .card.has-notes {
+      cursor: pointer;
     }
 
     .empty-col {
@@ -288,6 +309,7 @@
     <button class="filter-btn" data-filter="5">Phase 5</button>
     <button class="filter-btn" data-filter="6">Phase 6</button>
     <button class="filter-btn" data-filter="ops">Ops</button>
+    <button class="filter-btn" data-filter="governance">Governance</button>
     <button class="filter-btn" data-filter="post-mvp1">Post MVP1</button>
   </nav>
 </header>
@@ -325,7 +347,8 @@
 
   function getFilteredTasks() {
     if (currentFilter === 'all') return allTasks;
-    if (currentFilter === 'ops') return allTasks.filter(function(t) { return !t.phase; });
+    if (currentFilter === 'ops') return allTasks.filter(function(t) { return !t.phase && t.type !== 'governance'; });
+    if (currentFilter === 'governance') return allTasks.filter(function(t) { return t.type === 'governance' && !t.phase; });
     if (currentFilter === 'post-mvp1') return allTasks.filter(function(t) { return t.phase === 'post-mvp1'; });
     return allTasks.filter(function(t) { return t.phase === parseInt(currentFilter); });
   }
@@ -333,8 +356,8 @@
   function renderStats() {
     var statsEl = document.getElementById('phase-stats');
     var totalEl = document.getElementById('total-stat');
-    // Exclude post-mvp1 tasks from overall count
-    var activeTasks = allTasks.filter(function(t) { return t.phase !== 'post-mvp1'; });
+    // Exclude post-mvp1 and removed tasks from overall count
+    var activeTasks = allTasks.filter(function(t) { return t.phase !== 'post-mvp1' && t.status !== 'removed'; });
     var done = activeTasks.filter(function(t) { return t.status === 'done'; }).length;
     var pct  = Math.round((done / activeTasks.length) * 100);
     var d = new Date();
@@ -342,14 +365,16 @@
     totalEl.textContent = done + '/' + activeTasks.length + ' tasks (' + pct + '%)  ·  Updated ' + today;
 
     var groups = [
-      { label: 'Phase 1', tasks: allTasks.filter(function(t) { return t.phase === 1; }) },
-      { label: 'Phase 2', tasks: allTasks.filter(function(t) { return t.phase === 2; }) },
-      { label: 'Phase 3', tasks: allTasks.filter(function(t) { return t.phase === 3; }) },
-      { label: 'Phase 4', tasks: allTasks.filter(function(t) { return t.phase === 4; }) },
-      { label: 'Phase 5', tasks: allTasks.filter(function(t) { return t.phase === 5; }) },
-      { label: 'Phase 6', tasks: allTasks.filter(function(t) { return t.phase === 6; }) },
-      { label: 'Ops',     tasks: allTasks.filter(function(t) { return !t.phase; }) },
-      { label: 'Post MVP1', tasks: allTasks.filter(function(t) { return t.phase === 'post-mvp1'; }), excluded: true },
+      { label: 'Phase 1', tasks: allTasks.filter(function(t) { return t.phase === 1 && t.status !== 'removed'; }) },
+      { label: 'Phase 2', tasks: allTasks.filter(function(t) { return t.phase === 2 && t.status !== 'removed'; }) },
+      { label: 'Phase 3', tasks: allTasks.filter(function(t) { return t.phase === 3 && t.status !== 'removed'; }) },
+      { label: 'Phase 4', tasks: allTasks.filter(function(t) { return t.phase === 4 && t.status !== 'removed'; }) },
+      { label: 'Phase 5', tasks: allTasks.filter(function(t) { return t.phase === 5 && t.status !== 'removed'; }) },
+      { label: 'Phase 6', tasks: allTasks.filter(function(t) { return t.phase === 6 && t.status !== 'removed'; }) },
+      { label: 'Ops',     tasks: allTasks.filter(function(t) { return !t.phase && t.type !== 'governance' && t.status !== 'removed'; }) },
+      // Lane rule: post-mvp1 > phase 1-6 > governance > ops — must match tracker/build.cjs
+      { label: 'Governance', tasks: allTasks.filter(function(t) { return t.type === 'governance' && !t.phase && t.status !== 'removed'; }) },
+      { label: 'Post MVP1', tasks: allTasks.filter(function(t) { return t.phase === 'post-mvp1' && t.status !== 'removed'; }), excluded: true },
     ];
 
     statsEl.innerHTML = '';
@@ -369,8 +394,9 @@
 
   function makeCard(task) {
     var card = document.createElement('div');
-    card.className = 'card';
-    var phaseLabel = task.phase === 'post-mvp1' ? 'Post MVP1' : (task.phase ? 'P' + task.phase : 'Ops');
+    card.className = 'card' + (task.notes ? ' has-notes' : '');
+    var phaseLabel = task.phase === 'post-mvp1' ? 'Post MVP1' : (task.phase ? 'P' + task.phase : (task.type === 'governance' ? 'Governance' : 'Ops'));
+    var expandIndicator = task.notes ? '<span class="expand-indicator">▼</span>' : '';
     var notes = task.notes
       ? '<p class="card-notes">' + task.notes + '</p>'
       : '';
@@ -378,10 +404,18 @@
       '<div class="card-meta">' +
         '<span class="id-chip">' + task.id + '</span>' +
         '<span class="phase-chip">' + phaseLabel + '</span>' +
+        expandIndicator +
       '</div>' +
       '<p class="card-title">' + task.title + '</p>' +
       '<span class="type-badge type-' + task.type + '">' + task.type + '</span>' +
       notes;
+
+    if (task.notes) {
+      card.addEventListener('click', function() {
+        card.classList.toggle('expanded');
+      });
+    }
+
     return card;
   }
 

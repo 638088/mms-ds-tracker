@@ -209,9 +209,9 @@
     "id": "DS-030",
     "phase": 4,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-tooltip (Marina: tooltip)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Marina markup reused, mms CSS applied. Merged in PR #101."
   },
   {
     "id": "DS-031",
@@ -297,9 +297,9 @@
     "id": "DS-059",
     "phase": 4,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-accordion (Marina: accordion, accordion-item)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Marina markup reused, mms CSS applied. Fixed Marina ARIA-labelledby defect (unique per-instance ids). Grid-template-rows expand/collapse replaces Marina's JS-measured max-height. All 5 test layers pass; wcagTables['accordion'] generated (13 rows, 6 PASS / 8 N/A). Merged in PR #100."
   },
   {
     "id": "DS-060",
@@ -525,7 +525,7 @@
     "id": "DS-092",
     "phase": 4,
     "type": "build",
-    "status": "backlog",
+    "status": "in-progress",
     "title": "Build mms-card (Marina: card)",
     "notes": "Marina markup reused, mms CSS applied."
   },
@@ -917,8 +917,8 @@
     "phase": 6,
     "type": "build",
     "status": "backlog",
-    "title": "mms-button: destructive/error colorScheme + fix nested-interactive WCAG violation",
-    "notes": "Two related mms-button fixes bundled as one ticket. Originally ticketed as DS-141 during the DS-023 session (2026-08-04), before that number was independently claimed by the tracker-restructuring ticket that merged to origin/main first (PR #73) — renumbered to DS-142 during /rebase sync (2026-08-05) to resolve the collision; no content change. (1) NOT YET BUILT: mms-modal's alertType prop currently fakes destructive-action styling via inline CSS custom-property overrides in _renderFooter() (destructiveSolidStyle/destructiveOutlineStyle) because mms-button has no destructive colorScheme of its own. Marina's equivalent buttons (primary-button, secondary-button, ghost-button) natively support alert-type='destructive' with dedicated render branches -- add the same to mms-button (native destructive/error variant on primary/secondary/ghost), then have mms-modal consume it via a real prop passthrough instead of inline style overrides. alertType/ModalAlertType was dropped from DS-023's mms-modal scope pending this ticket; re-add once this lands. (2) ALREADY FIXED (bundled on feature/ds-023-mms-modal, uncommitted): discovered during DS-023's /test-component axe run, mms-button set role=\"button\" tabindex=\"0\" on its own host while also rendering a native <button> in shadow DOM, producing a nested-interactive violation on every instance (system-wide, not modal-specific). Fixed by removing the host-level role/tabindex/keydown-handler entirely and setting static shadowRootOptions = { delegatesFocus: true } so the native shadow <button> is the sole focusable/interactive target. tests/modal.a11y.ts's nested-interactive exclusion removed now that the underlying defect is fixed. Ships alongside DS-023, pending J's review; ticket stays open/backlog until part (1) also lands."
+    "title": "mms-button: destructive/error colorScheme + nested-interactive WCAG fix + full-width mode",
+    "notes": "Three related mms-button fixes bundled as one ticket. Originally ticketed as DS-141 during the DS-023 session (2026-08-04), before that number was independently claimed by the tracker-restructuring ticket that merged to origin/main first (PR #73) — renumbered to DS-142 during /rebase sync (2026-08-05) to resolve the collision; no content change. (1) NOT YET BUILT: mms-modal's alertType prop currently fakes destructive-action styling via inline CSS custom-property overrides in _renderFooter() (destructiveSolidStyle/destructiveOutlineStyle) because mms-button has no destructive colorScheme of its own. Marina's equivalent buttons (primary-button, secondary-button, ghost-button) natively support alert-type='destructive' with dedicated render branches -- add the same to mms-button (native destructive/error variant on primary/secondary/ghost), then have mms-modal consume it via a real prop passthrough instead of inline style overrides. alertType/ModalAlertType was dropped from DS-023's mms-modal scope pending this ticket; re-add once this lands. (2) ALREADY FIXED (bundled on feature/ds-023-mms-modal, uncommitted): discovered during DS-023's /test-component axe run, mms-button set role=\"button\" tabindex=\"0\" on its own host while also rendering a native <button> in shadow DOM, producing a nested-interactive violation on every instance (system-wide, not modal-specific). Fixed by removing the host-level role/tabindex/keydown-handler entirely and setting static shadowRootOptions = { delegatesFocus: true } so the native shadow <button> is the sole focusable/interactive target. tests/modal.a11y.ts's nested-interactive exclusion removed now that the underlying defect is fixed. Ships alongside DS-023, pending J's review; ticket stays open/backlog until part (1) also lands. (3) NOT YET BUILT: mms-button needs a full-width mode -- it currently always shrink-wraps to its label with no way to stretch to its container's width. Needed by mms-card's action-style vt-actions (stacked footer actions), which needs its buttons to line up edge-to-edge instead of shrink-wrapping. Marina's primary-button, secondary-button, and ghost-button all implement an identical pattern: a fullWidth boolean property reflected as a full-width attribute, defaulting to false, with host CSS setting display: block and width: 100% on both the host and the inner button element when the attribute is present. mms-button already uses this same reflected-kebab-case-attribute convention for its other boolean/multi-word props (color-scheme, left-icon, right-icon, icon-only), so full-width mirrors both Marina and mms's own existing naming convention -- add it the same way, across all three colorScheme/variant paths. DS-092 (mms-card) is blocked on this landing."
   },
   {
     "id": "DS-143",
@@ -1039,5 +1039,13 @@
     "status": "backlog",
     "title": "Build mms-multi-select (Marina: Select Multiple)",
     "notes": ""
+  },
+  {
+    "id": "DS-160",
+    "phase": 6,
+    "type": "build",
+    "status": "backlog",
+    "title": "Build mms-tag + mms-status-tag (Marina: tag, status-tag)",
+    "notes": "Two components bundled as one ticket -- Marina's card component treats them as interchangeable fillers for the same slot, so they should land together. Confirmed directly from Marina's card.stories.ts: the card's tag slot accepts either ds-tag or ds-status-tag based on a tagType: 'tag' | 'status-tag' story control -- not a single-component decision. mms-card's own Storybook demo already stands in a generic 'Tag' pill and a green 'New' status pill as placeholders for these two components, and DS-092 (mms-card) is blocked on this ticket landing. input-tag is explicitly out of scope -- not needed. (1) mms-tag (Marina: tag.component.ts, custom element ds-tag): generic stroke/fill label tag. Props to port: tag-style ('stroke' default or 'fill'), optional left/right icon slots, label text. Marina's prop names carry Figma-export numeric suffixes (e.g. left-icon-17472-3, label-text-17562-0) -- rename to mms's plain kebab-case convention (e.g. left-icon, label or a default slot) per mms-button's existing pattern (color-scheme, left-icon, right-icon, icon-only). (2) mms-status-tag (Marina: status-tag.component.ts, custom element ds-status-tag): semantic status tag. Props to port: alert-type ('success' default, 'error', 'caution', 'informational'), each with its own color treatment, plus optional left/right icon and label text following the same renamed-prop convention as (1). Both components: define token contract (colors must resolve through structural/brand tokens, not hardcoded, per contracts/css-tokens.md), Storybook story, axe-core test, visual regression baseline -- standard component governance gate."
   }
 ]

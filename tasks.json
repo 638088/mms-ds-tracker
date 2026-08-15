@@ -183,7 +183,7 @@
   },
   {
     "id": "DS-024",
-    "phase": 4,
+    "phase": 5,
     "type": "build",
     "status": "backlog",
     "title": "Build mms-spinner (Marina: inline-spinner, page-spinner — size/context variants)",
@@ -305,9 +305,9 @@
     "id": "DS-060",
     "phase": 4,
     "type": "build",
-    "status": "backlog",
+    "status": "done",
     "title": "Build mms-tabs (Marina: tabs, tabs-item)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Marina markup reused, mms CSS applied. Merged in PR #104."
   },
   {
     "id": "DS-061",
@@ -1041,8 +1041,24 @@
     "notes": ""
   },
   {
+    "id": "DS-158",
+    "phase": "post-mvp1",
+    "type": "design",
+    "status": "backlog",
+    "title": "Research and design tabs notify/badge indicator (post-MVP1)",
+    "notes": "Deferred from DS-060 (mms-tabs build). Supports a case-manager-specific scenario: surfacing the count of outstanding items associated with a given tab. Needs its own design pass — the removed DS-060 implementation (a plain unlabeled dot, no count) was not fit for purpose. Scope: visual treatment (dot vs. numeric badge), data contract (does mms-tabs-item take a count prop, or just a boolean presence flag?), a11y (how the count is announced to screen readers), and interaction with existing size/density/tab-style variants."
+  },
+  {
+    "id": "DS-159",
+    "phase": 5,
+    "type": "build",
+    "status": "backlog",
+    "title": "Refactor mms-breadcrumbs to consume ui-label tokens instead of body tokens",
+    "notes": "Companion to DS-142 (mms-button) — same root cause, split out because DS-142 already covers a lot for mms-button. Discovered during DS-060 (mms-tabs): the ui-label type scale (--type-ui-label-{sm,md,lg}-size) is being realigned to alias body's size cadence (14/16/18px) while keeping its own weight (500, vs body's 400) and letter-spacing (0.01em) as the deliberate UI-chrome differentiator. mms-breadcrumbs currently uses --type-body-{sm,md}-size directly for all crumbs, with only the current-page crumb getting a hardcoded font-weight:700 override -- non-current (clickable) crumbs fall back to implicit regular weight. Swap breadcrumbs to the corrected --type-ui-label-{sm,md}-size tokens so clickable crumbs render at medium (500) weight, distinct from both body copy and the bolder current-page marker. Breadcrumbs never renders inline within body prose (unlike mms-link, which was deliberately left on body tokens for that reason -- see DS-060 session notes), so this is a clean swap with no inline-text mismatch risk. Scope: font-size/line-height/letter-spacing/weight token swap only, no layout/behavior change. Re-run breadcrumbs a11y suite and visual regression baseline after the swap."
+  },
+  {
     "id": "DS-160",
-    "phase": 6,
+    "phase": 4,
     "type": "build",
     "status": "backlog",
     "title": "Build mms-tag + mms-status-tag (Marina: tag, status-tag)",

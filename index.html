@@ -446,7 +446,7 @@
     renderBoard();
   });
 
-  fetch('tasks.json')
+  fetch('tasks.json?v=' + Date.now())
     .then(function(r) { return r.json(); })
     .then(function(data) {
       allTasks = data;

@@ -525,9 +525,9 @@
     "id": "DS-092",
     "phase": 4,
     "type": "build",
-    "status": "in-progress",
+    "status": "done",
     "title": "Build mms-card (Marina: card)",
-    "notes": "Marina markup reused, mms CSS applied."
+    "notes": "Marina markup reused, mms CSS applied. Overflow action-menu is a temporary disclosure-button stand-in (not a full WAI-ARIA menu) pending a future mms-action-menu component. alignment (stacked) and the aspirational expandable actionStyle removed from the prop surface per review feedback (expandable split out to DS-162, phase 6, for a real future implementation). All 5 test layers re-verified post-removal: 54/54 unit tests pass, a11y-test PASS (33/33 axe+Playwright, coverage audit 30 PASS/0 FAIL/13 N/A), token validation PASS (35/35 refs), hardcoded-value audit PASS, Storybook production build PASS. Committed a086cb9 after /rebase onto origin/main (5b8187b). Merged in PR #112."
   },
   {
     "id": "DS-093",
@@ -1036,7 +1036,7 @@
     "id": "DS-157",
     "phase": 4,
     "type": "build",
-    "status": "in-progress",
+    "status": "backlog",
     "title": "Build mms-multi-select (Marina: Select Multiple)",
     "notes": ""
   },
@@ -1071,5 +1071,13 @@
     "status": "backlog",
     "title": "mms-stepper radial 'view all steps' drawer interaction",
     "notes": "Spun off from DS-063 per J's explicit scoping call -- not built as part of that ticket. mms-stepper's radial layout (the compact view vertical automatically becomes below the 768px breakpoint, or that type=\"radial\" renders directly) has an optional action button (actionLabel prop, currently firing a plain action-click event with no built-in follow-up UI). The intended production behavior: clicking that button should open a drawer that slides out and lets the user confirm/navigate across all steps -- giving back, in an overlay, the full step list that's hidden while collapsed. No mms-drawer component exists yet anywhere in src/components/ -- this ticket needs to (1) define and build mms-drawer as a new component (contract, Marina reference if one exists, or a from-scratch spec if not), and (2) wire mms-stepper's radial action-click to open it, populated from the same items array. Depends on / should read DS-063's finished radial + responsive-collapse implementation first for the exact contract (action-click detail shape, items structure) it needs to consume."
+  },
+  {
+    "id": "DS-162",
+    "title": "Implement true expandable actionStyle for mms-card",
+    "phase": 6,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Split out of DS-092. `expandable` was a CardActionStyle value with no real behavior — visually identical to `1-action`, no expand/collapse state, no dedicated CSS, no aria-expanded, nothing revealed. Removed from the type/prop/docs entirely in DS-092 rather than ship a naming-only stand-in.\n\nWhen actually built: real expand/collapse state (likely a `@state` + toggle handler, mirroring the existing action-menu disclosure pattern in mms-card.component.ts), `aria-expanded` on the trigger, a defined mechanism for what content reveals (new slot vs. toggling visibility of existing body/body-content), motion-token-driven expand/collapse transition, keyboard support (Enter/Space activation, matches native button semantics). Re-add 'expandable' to CardActionStyle only once this is functional, not before."
   }
 ]

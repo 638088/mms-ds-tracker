@@ -112,7 +112,7 @@
   {
     "id": "DS-011",
     "title": "Configure Figma Variables output in Style Dictionary",
-    "phase": null,
+    "phase": "post-mvp1",
     "type": "ops",
     "status": "blocked",
     "notes": "Figma Variables output blocked on Figma MCP IT approval. When unblocked: add Figma Variables transform to style-dictionary.config.mjs for code→Figma token sync."
@@ -423,6 +423,7 @@
   {
     "id": "DS-079",
     "title": "Define layout pattern recipes and card-min-width token",
+    "phase": 6,
     "type": "build",
     "status": "backlog",
     "notes": "The container model (DS-008a) defines the page-level shape — centered max-width container with internal padding. What it doesn't define is how multiple items arrange WITHIN the container. Without column grid concepts, we need a named, finite set of layout pattern recipes that AI generates natively and that map 1:1 to Figma component names. Add to tokens/structural/layout.json (or a new tokens/structural/layout-patterns.json):\n\n  • --layout-card-min-width: 280px — minimum card width threshold for repeat(auto-fill, minmax(...)) grids;     determines when a card grid wraps to fewer columns. AI defaults to ~280px naturally.\n\nAdd a new Storybook page (Foundations → Layout Patterns) documenting five recipes, each with reference CSS and Figma equivalent:\n\n  1. Stack — vertical with gap. flex column + gap.\n  2. Cluster — horizontal wrap with gap. flex row + flex-wrap + gap.\n  3. Sidebar — fixed-width sidebar + flex content. grid-template-columns or flex with basis.\n  4. Switcher — row above a threshold, column below. flex-wrap + flex-basis trick (no media query).\n  5. CardGrid — auto-fill minmax(--layout-card-min-width, 1fr).\n\nEach recipe gets a CSS class name (.ds-stack, .ds-cluster, etc.) intended to be mirrored as a Figma auto-layout component preset. The naming is the contract: designers pick a Figma component named 'Stack', AI writes a div with class 'ds-stack', they produce the same output. Patterns are based on Every Layout (every-layout.dev) primitives."
@@ -430,6 +431,7 @@
   {
     "id": "DS-080",
     "title": "Add section composition pattern + vertical section padding tokens",
+    "phase": 6,
     "type": "build",
     "status": "backlog",
     "notes": "DS-008a defined the inner container model (centered max-width + horizontal padding). The model is incomplete for real page composition because AI builds pages as stacked full-bleed sections, each containing a centered container with vertical padding-block. Adding the section pattern closes this gap.\n\nTOKENS (add to tokens/structural/layout.json):\n  • --layout-section-padding-compact: 48px — padding-block at smaller viewports (below the padding step). Aliases --spacing-xl2.\n  • --layout-section-padding-default: 96px — padding-block at the padding step and above. Aliases --spacing-xxl3.\n  • Step transitions at --layout-padding-step (768px), same boundary as horizontal padding for consistency.\n\nREFERENCE CSS PATTERN documented on the Layout System page:\n  .layout-section { padding-block: var(--layout-section-padding-compact); }\n  @media (min-width: 768px) { .layout-section { padding-block: var(--layout-section-padding-default); } }\n  .layout-section > .layout-container { ... } /* nested container handles horizontal */\n\nPAGE UPDATE — Foundations → Layout → Layout System:\n  • Restructure into two stacked sub-sections: 'Container' (existing content) and 'Section composition' (new).\n  • Expand Layout Tokens table to include the new --layout-section-padding-* values.\n  • Add a second visualization showing stacked sections with their padding-block at 375 and 1440.\n  • Update Reference CSS to show the full section + container composition pattern AI produces.\n  • Update Tip — Figma frame strategy to mention designing full-height stacked sections, not just the container.\n\nRATIONALE: Container and section are the same architectural concern — page composition. Keeping them on one page preserves the unified mental model that matches how AI actually generates code.\n\n2026-06-22 — Section vertical rhythm was initially attempted in DS-008a as `--layout-gap-section: 48px` (categorized as a 'gap' token). Pulled back because it conflates two different concerns: inline `gap` (CSS gap property, spacing between siblings inside a flex/grid container) vs section vertical rhythm (CSS `padding-block` on the section, or `margin-block` between sections). AI's mental model matches this split — `gap-2/4/6/8` for inline, `py-12/24` or `space-y-16` for section rhythm. This ticket owns the section side properly: define `--layout-section-padding-compact` and `--layout-section-padding-default` as `padding-block` tokens applied to section wrappers, NOT as gap tokens."
@@ -437,6 +439,7 @@
   {
     "id": "DS-081",
     "title": "Define breakpoint token scale (component-level) — decide between Marina-inspired and AI-aligned",
+    "phase": 6,
     "type": "build",
     "status": "backlog",
     "notes": "DS-008a removed the breakpoints section from the Layout System page because breakpoints no longer drive container margins (container uses max-width + auto-centering instead). But AI still writes media queries at conventional breakpoints for component-level responsive behavior — type scaling, layout pattern shifts (CardGrid columns, Switcher threshold), nav collapse, etc. The DS needs a sanctioned breakpoint scale or AI will improvise.\n\nDECISION REQUIRED — pick a scale:\n\n  Option A (Marina-inspired):  375 / 768 / 1024 / 1440 / 1920\n    Pros: matches Marina, matches typical Figma frame sizes (1440 = designer default), preserves prior decisions.\n    Cons: 1440 sits awkwardly against the 1280 container cap. AI doesn't naturally produce 1440 / 1920 media queries.\n\n  Option B (Tailwind / AI-native):  640 / 768 / 1024 / 1280 / 1536\n    Pros: Aligns with AI defaults (Tailwind is the most common framework AI generates). 1280 matches the container cap.\n    Cons: Deviates from Marina precedent. 1440 (designer convention) is not in the scale.\n\n  Option C (Hybrid):  375 / 768 / 1024 / 1280 / 1536  — keeps 375 (mobile design anchor) and 1280 (container cap),\n    drops 1440/1920 in favor of AI-native Tailwind values for the largest steps.\n\nSCOPE WHEN DECIDED:\n  • Update tokens/structural/layout.json with chosen breakpoint scale (replacing the existing five-breakpoint set).\n  • Restore a 'Breakpoints' section to the Layout System Storybook page, scoped to component-level responsive use.\n    Make it clear the scale does NOT drive container margins (the container model is breakpoint-agnostic except for\n    the padding step at 768).\n  • Document which breakpoints AI writes naturally vs. which are design-side anchors only.\n  • Audit prior tickets / decisions for any references to the old 375/768/1024/1440/1920 scale that need updating."
@@ -508,7 +511,7 @@
   {
     "id": "DS-090",
     "title": "MCP server development for agentic prototyping (@mms/mcp)",
-    "phase": null,
+    "phase": "post-mvp1",
     "type": "build",
     "status": "blocked",
     "notes": "Decision (2026-07-02): Pending approval from Maximus IT/leadership. Blocked until approved. Analogous to ui-kit MCP server. For agentic prototyping only — not consumer-facing."
@@ -516,10 +519,10 @@
   {
     "id": "DS-091",
     "title": "Define distribution pipeline strategy and ops tickets",
-    "phase": null,
+    "phase": "post-mvp1",
     "type": "ops",
     "status": "backlog",
-    "notes": "Decision (2026-07-02): Distribution pipeline (CSS, React binding, Salesforce, AEM, Drupal) to be tracked under Ops given DevOps dependencies. JFrog registry is prerequisite. Break into sub-tickets once JFrog is active."
+    "notes": "Decision (2026-07-02): Distribution pipeline (CSS, React binding, Salesforce, AEM, Drupal) to be tracked under Ops given DevOps dependencies. JFrog registry is prerequisite. Break into sub-tickets once JFrog is active.\n\nACTION NEEDED (2026-08-21, J confirmed in chat): JFrog has been active since 2026-07-15 (DS-089, done) — only one package is published today, the single bundled `@mms/design-system` npm package (per DS-163's cross-platform install guide). The multi-package distribution model in CLAUDE.md §3.2 (`@mms/components-react` generated React binding, `@mms/aem-clientlib`, `@mms/drupal-module`, `@mms/headless-css`, Salesforce integration) does not exist yet — none of those are separate publishable packages. Break this ticket into concrete sub-tickets, one per target package/platform, before Phase 4 (Distribution Packages) work starts. Parked post-MVP1 for now."
   },
   {
     "id": "DS-092",
@@ -666,8 +669,8 @@
     "title": "Create /publish-nexus skill for JFrog NPM release",
     "phase": null,
     "type": "ops",
-    "status": "blocked",
-    "notes": "Equivalent to ui-kit /publish-nexus. Post-merge NPM release workflow. Blocked on DS-089 (JFrog setup). Track for handoff once JFrog is active."
+    "status": "removed",
+    "notes": "Equivalent to ui-kit /publish-nexus. Post-merge NPM release workflow. Blocked on DS-089 (JFrog setup). Track for handoff once JFrog is active.\n\nSUPERSEDED 2026-08-21 (J confirmed in chat): /publish-npm skill (.claude/skills/publish-npm/SKILL.md) already delivers this — J-only invocation, VPN + auth pre-flight, build, dry-run, publish, and anonymous-install verification gates. No separate skill needed. Set to 'removed' rather than 'done': no code was ever merged under this ticket ID (tracker-status-guard.sh finds no commit on main referencing DS-109), so 'done' isn't mechanically or semantically accurate — this ticket is superseded/duplicate, not completed."
   },
   {
     "id": "DS-110",
@@ -736,7 +739,7 @@
   {
     "id": "DS-118",
     "title": "Adobe CC library connection for theme asset sharing",
-    "phase": null,
+    "phase": "post-mvp1",
     "type": "ops",
     "status": "backlog",
     "notes": "Explore exporting theme packages (typography, colors, logo) to Adobe CC Libraries. Goal: shared design assets for both digital properties AND print projects. Research: (1) CC Libraries API, (2) Style Dictionary → CC export format, (3) automation potential."
@@ -752,7 +755,7 @@
   {
     "id": "DS-120",
     "title": "Configure Figma MCP for design-code sync",
-    "phase": null,
+    "phase": "post-mvp1",
     "type": "ops",
     "status": "backlog",
     "notes": "Enable Figma MCP server in GitHub Copilot. Requires: (1) Maximus IT admin approval for enterprise Copilot policy, (2) Figma API token setup. Enables bidirectional design-code workflow — pull design context into code, push rendered UI back to Figma. Prerequisite for /sync-tokens (DS-115) and /sync-icons (DS-116)."
@@ -762,16 +765,16 @@
     "title": "JFrog anonymous read — enable seamless npm install",
     "phase": null,
     "type": "ops",
-    "status": "pending-review",
-    "notes": "REOPENED 2026-07-21. Peer ran diagnostic 2026-07-22: curl 200 + npm E401 — suggests project-level .npmrc or env var with bad auth. Deeper diagnostic sent. May be working now. See docs/ds-121-investigation-2026-07-21.md."
+    "status": "done",
+    "notes": "REOPENED 2026-07-21. Peer ran diagnostic 2026-07-22: curl 200 + npm E401 — suggests project-level .npmrc or env var with bad auth. Deeper diagnostic sent. May be working now. See docs/ds-121-investigation-2026-07-21.md.\n\nCLOSED 2026-08-21 (J confirmed in chat): re-verified via docs/ds-163-validation-2026-08-20.md — `HOME=/tmp/kai-vpn-probe npm view @mms/design-system version --registry=<artifactory>` succeeded on VPN with zero credentials configured, confirming anonymous read access works end-to-end. Artifactory NPM package is consumable without a token."
   },
   {
     "id": "DS-122",
     "title": "Implement hard enforcement for workflow governance hooks",
     "phase": null,
     "type": "ops",
-    "status": "blocked",
-    "notes": "BLOCKED — Local hooks are bypassable. Agent can create approval flags itself (`touch /tmp/commit-approved && git commit`), defeating the guard. GitHub branch protection requires Pro ($4/mo) or org account — personal private repo cannot enable it.\n\nCURRENT STATE:\n- 13 governance rules documented in .github/copilot-instructions.md\n- Husky pre-commit/post-commit hooks installed\n- bin/gh and bin/git wrappers installed\n- Enforcement is instruction-based, not mechanical\n\nFUTURE UNBLOCK CONDITIONS:\n1. GitHub Pro or org account — enables branch protection (require PR, require review)\n2. Copilot enterprise policy change — enables chat.useHooks\n3. Claude Code adoption — supports mechanical hooks\n4. Model capability — future models may have built-in compliance tracking\n\nWORKAROUND: Explicit instruction patterns + immediate J callout on violation. See docs/hook-enforcement.md for full architecture."
+    "status": "done",
+    "notes": "BLOCKED — Local hooks are bypassable. Agent can create approval flags itself (`touch /tmp/commit-approved && git commit`), defeating the guard. GitHub branch protection requires Pro ($4/mo) or org account — personal private repo cannot enable it.\n\nCURRENT STATE:\n- 13 governance rules documented in .github/copilot-instructions.md\n- Husky pre-commit/post-commit hooks installed\n- bin/gh and bin/git wrappers installed\n- Enforcement is instruction-based, not mechanical\n\nFUTURE UNBLOCK CONDITIONS:\n1. GitHub Pro or org account — enables branch protection (require PR, require review)\n2. Copilot enterprise policy change — enables chat.useHooks\n3. Claude Code adoption — supports mechanical hooks\n4. Model capability — future models may have built-in compliance tracking\n\nWORKAROUND: Explicit instruction patterns + immediate J callout on violation. See docs/hook-enforcement.md for full architecture.\n\nDONE 2026-08-21 (J confirmed in chat): unblock condition #3 (Claude Code adoption) landed and PR #42 (\"fix: implement hard enforcement for workflow governance hooks (DS-122)\") shipped the mechanical PreToolUse/Husky hook layer — commit-guard, protect-branches, tracker-status-guard, pr-create-guard, pr-merge-guard, violation-guard. Enforcement is hard/mechanical now, not instruction-based. See CLAUDE.md 15-rule table and §5.4 Copilot vs Claude Code table."
   },
   {
     "id": "DS-123",
@@ -860,8 +863,8 @@
     "id": "DS-134",
     "title": "Permission model enhancement — intent-driven allowlist, block inline python scripts",
     "type": "governance",
-    "status": "backlog",
-    "notes": "Implementation guide: .claude/memory/permission-model-enhancement-2026-08-03.md. Reduce permission prompts in 'Edit Automatically' mode via intent-based allowlist (read operations = safe, write scoped + guarded). Add read-only tools (jq, cd, pwd, etc.) to settings.json. Block inline python scripts (python3 -c) in violation-guard.sh to enforce engineering norm: use jq for JSON validation, not python. Python remains available for ad-hoc tasks (will prompt). Document engineering norms in CLAUDE.md § 5.6 and Key Decisions § 11. Audit existing skills for python usage, replace with jq. 5-step implementation plan with validation scenarios in handoff doc."
+    "status": "done",
+    "notes": "Implementation guide: .claude/memory/permission-model-enhancement-2026-08-03.md. Reduce permission prompts in 'Edit Automatically' mode via intent-based allowlist (read operations = safe, write scoped + guarded). Add read-only tools (jq, cd, pwd, etc.) to settings.json. Block inline python scripts (python3 -c) in violation-guard.sh to enforce engineering norm: use jq for JSON validation, not python. Python remains available for ad-hoc tasks (will prompt). Document engineering norms in CLAUDE.md § 5.6 and Key Decisions § 11. Audit existing skills for python usage, replace with jq. 5-step implementation plan with validation scenarios in handoff doc.\n\nDONE 2026-08-21 (J confirmed in chat): core scope shipped in PR #83 (\"chore: operationalize intent-driven permission model\") — settings.json read-only allowlist, CLAUDE.md §5.7 Engineering Norms docs, Key Decisions Log rows. One piece intentionally dropped: blocking inline `python3 -c` in violation-guard.sh — editing that hook to add a self-modification guard hit the same categorical classifier block encountered again on 2026-08-21 (allowlist-widening edit). J: close it out now, revisit only if it becomes a real problem."
   },
   {
     "id": "DS-135",
@@ -1145,5 +1148,13 @@
     "type": "ops",
     "status": "backlog",
     "notes": "Two defects found while running `/update-docs` for v0.22.0 on 2026-08-21. They are filed together because they share a root cause: a check that everyone assumes is running is not running, so drift accumulates silently until someone happens to look.\n\n## Defect 1 — this repo has never type-checked\n\n`npx tsc --noEmit` against the root `tsconfig.json` reports 9 errors across 6 files. None of them are new, and none of them break anything at runtime.\n\n**Why they are invisible.** TypeScript types are erased before any code runs. This repo builds with esbuild (`scripts/build-package.mjs`), and Vitest and Storybook also transpile via esbuild. All three strip types; none check them. Verified four ways:\n\n1. There is no `typecheck` script in `package.json`\n2. There is no `tsc` reference anywhere in `.github/workflows/` — CI runs `build-package`, `test:unit`, `verify-bundle`, `test:a11y`, `audit:contrast`, `audit:a11y-coverage`, `verify-gates`, and nothing else\n3. `build-package` is esbuild-based, so it never evaluates type correctness\n4. `tsconfig.lib.json`, the config that scopes the shipped library, explicitly excludes `*.test.ts`, `*.stories.ts`, `src/stories/**`, `src/tests/**`, and `.storybook/**`\n\nEvery one of the 9 errors sits in exactly those excluded paths. The root `tsconfig.json` includes them, but nothing ever invokes the root config. So the check has effectively never run here.\n\n**The 9 errors, classified.**\n\n| Site | Complaint | Runtime effect | Verdict |\n|---|---|---|---|\n| `.storybook/main.ts:27` | `autodocs` is not a valid `DocsOptions` key | none, silently ignored | dead config |\n| `mms-checkbox.test.ts:472-473` | `.checked` / `.value` on type `never` | none | type noise |\n| `mms-radio.test.ts:452-453` | `.selected` / `.value` on type `never` | none | type noise |\n| `mms-toggle.test.ts:305-306` | `.checked` / `.value` on type `never` | none | type noise |\n| `TextField.stories.ts:750` | `>` on `string or number or boolean` | none | type noise |\n| `Stepper.stories.ts:915` | `state: string` not assignable to `StepperItemState` | none today | **disabled guardrail** |\n\n**The three `never` errors are a TypeScript limitation, not a mistake.** The declarations are correctly annotated — for example `let eventDetail: { checked: boolean; value: string } or null = null`. The value is then assigned inside an event-listener callback. TypeScript's control-flow analysis cannot see assignments made inside a callback, so it narrows the variable to `null` at the assertion, and optional-chaining off `null` collapses the type to `never`. The tests genuinely assert what they claim: if the event detail never arrived, the assertion would compare `undefined` against `true` and fail. Nothing is hidden. Fix by asserting the type at the read site or restructuring the capture.\n\n**`TextField.stories.ts:750` is the same class** — `maxLength` comes from a loosely-typed args bag, so TypeScript will not permit a numeric comparison on the union. At runtime it is always a number.\n\n**`.storybook/main.ts:27` is genuinely dead.** `docs.autodocs` was removed in Storybook 8 and this repo is on Storybook 10.4, so the key is ignored. It is harmless here specifically because no story opts into autodocs — `tags: ['autodocs']` appears in zero files; the repo hand-authors its docs pages. Deleting the key changes nothing, but leaving it misleads a reader into thinking autodocs is configured.\n\n**`Stepper.stories.ts:915` is the one that matters.** The substeps array literal is built and then `.slice()`d before assignment, which makes TypeScript infer the literal independently and widen `state` from the `StepperItemState` union to plain `string`. All three values currently used are valid, so it renders correctly. But the union that exists to reject invalid states is not being enforced at that call site — writing `state: 'complete'` or `state: 'inprogress'` would raise no error and produce a silently unstyled substep at runtime. Fix with `satisfies StepperSubstep[]` on the literal.\n\n**Why this is worth a gate rather than a one-off cleanup.** The 9 errors are not hurting anything. The point is that the mechanism which would catch a genuine typo has never been running, and one of these arrived on 2026-08-20 in DS-161 / PR #114 and passed CI clean. Without a gate, the next one does too.\n\n## Defect 2 — the version string is hardcoded in six places\n\n`/update-docs` Steps 3 to 6 name four files to update on a version bump. The version string actually appears in six:\n\n| File | On the main-branch allowlist? |\n|---|---|\n| `README.md` | yes |\n| `package.json` | yes |\n| `src/stories/introduction/Welcome.stories.ts` | yes |\n| `src/stories/introduction/WhatsNew.stories.ts` | yes |\n| `src/stories/developer-guide/02-Installation.stories.ts` | **no** |\n| `src/stories/developer-guide/09-InstallationOld.stories.ts` | **no** |\n\nThe two Installation pages carry the version inside a sample `npm ls` output block. Both were correct when committed — they read 0.21.0 and the package was 0.21.0. They go stale only at the moment `/update-docs` bumps the version.\n\n**The structural problem:** `/update-docs` runs directly on `main` by design, but two of its six targets are not on `main-branch-allowlist.txt`, so the pre-commit hook blocks them. The skill cannot complete its own job without a feature branch and a PR. That has been true since the guide pages were written; it surfaced only because the file list was grepped rather than taken on trust.\n\n**Do not fix this by adding the two files to the allowlist.** That widens direct-to-main write access to satisfy a docs chore. Read the version from `package.json` at render time instead, so there is one touchpoint rather than six and the whole class of drift disappears.\n\n## Scope\n\n1. Fix the 9 existing type errors — annotate the three `never` capture sites, type the TextField args bag, add `satisfies StepperSubstep[]` to the stepper substeps literal, delete the dead `docs.autodocs` key\n2. Add a `typecheck` script running `tsc --noEmit` against the root config, and wire it into `ci.yml`\n3. Model the new gate in `scripts/verify-gates.mjs` so it is proven live rather than assumed — the same script already asserts 8 gates go red under a surgical mutation\n4. Read the version from `package.json` in `02-Installation.stories.ts` and `09-InstallationOld.stories.ts` instead of hardcoding it\n5. Correct the file list in `/update-docs` (`.claude/skills/update-docs/`, and its `.github/prompts/` Copilot mirror) to match reality\n\n## Verification\n\n- `npm run typecheck` exits 0 on a clean tree\n- `npm run verify-gates` reports the new gate LIVE, and reports it DISCONNECTED when the gate is deliberately removed\n- CI fails on a branch carrying a deliberately introduced type error, and the failure names the file and line\n- Bumping the version in `package.json` alone updates both Installation pages in a running Storybook, with no other file edited\n- A full `/update-docs` run touches only allowlisted files and needs no feature branch\n\n## Note on sequencing\n\nUntil this ships, `/update-docs` leaves the two Installation pages stale on every version bump. As of v0.22.0 they read 0.21.0. Whoever picks this up should confirm the current published version and correct them as part of step 4 rather than assuming they are one release behind."
+  },
+  {
+    "id": "DS-171",
+    "title": "Build mms-footer (Marina: footer)",
+    "phase": 4,
+    "type": "build",
+    "status": "backlog",
+    "notes": "Global site footer component. Marina reference: footer. Queued for Phase 4 (Distribution Packages) per J — parked, not started."
   }
 ]

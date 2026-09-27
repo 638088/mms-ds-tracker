@@ -230,12 +230,24 @@
       padding: 1px 5px;
     }
 
+    .card-title-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-id-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .card-title {
       font-size: 13px;
       font-weight: 500;
       line-height: 1.45;
       color: var(--c-text);
-      margin: 0 0 7px;
+      margin: 0;
     }
 
     .type-badge {
@@ -254,33 +266,38 @@
     .type-ops        { background: #f0f0f3; color: #4b4b5e; }
     .type-governance { background: #fff7ed; color: #c2410c; }
 
+    .card-details {
+      display: none;
+      margin-top: 7px;
+      padding-top: 7px;
+      border-top: 1px solid var(--c-border);
+    }
+
+    .card.expanded .card-details {
+      display: block;
+    }
+
     .card-notes {
       font-size: 11px;
       line-height: 1.5;
       color: var(--c-text-subtle);
       margin: 7px 0 0;
-      padding-top: 7px;
-      border-top: 1px solid var(--c-border);
-      display: none;
-    }
-
-    .card.expanded .card-notes {
-      display: block;
     }
 
     .expand-indicator {
       font-size: 9px;
       color: var(--c-text-subtle);
-      margin-left: auto;
       opacity: 0.6;
       transition: transform 0.2s ease;
+      flex-shrink: 0;
+      margin-top: 3px;
     }
 
     .card.expanded .expand-indicator {
       transform: rotate(180deg);
     }
 
-    .card.has-notes {
+    .card {
       cursor: pointer;
     }
 
@@ -394,27 +411,30 @@
 
   function makeCard(task) {
     var card = document.createElement('div');
-    card.className = 'card' + (task.notes ? ' has-notes' : '');
+    card.className = 'card';
     var phaseLabel = task.phase === 'post-mvp1' ? 'Post MVP1' : (task.phase ? 'P' + task.phase : (task.type === 'governance' ? 'Governance' : 'Ops'));
-    var expandIndicator = task.notes ? '<span class="expand-indicator">▼</span>' : '';
     var notes = task.notes
       ? '<p class="card-notes">' + task.notes + '</p>'
       : '';
     card.innerHTML =
-      '<div class="card-meta">' +
-        '<span class="id-chip">' + task.id + '</span>' +
-        '<span class="phase-chip">' + phaseLabel + '</span>' +
-        expandIndicator +
+      '<div class="card-title-row">' +
+        '<div class="card-id-row">' +
+          '<span class="id-chip">' + task.id + '</span>' +
+          '<span class="expand-indicator">▼</span>' +
+        '</div>' +
+        '<p class="card-title">' + task.title + '</p>' +
       '</div>' +
-      '<p class="card-title">' + task.title + '</p>' +
-      '<span class="type-badge type-' + task.type + '">' + task.type + '</span>' +
-      notes;
+      '<div class="card-details">' +
+        '<div class="card-meta">' +
+          '<span class="phase-chip">' + phaseLabel + '</span>' +
+        '</div>' +
+        '<span class="type-badge type-' + task.type + '">' + task.type + '</span>' +
+        notes +
+      '</div>';
 
-    if (task.notes) {
-      card.addEventListener('click', function() {
-        card.classList.toggle('expanded');
-      });
-    }
+    card.addEventListener('click', function() {
+      card.classList.toggle('expanded');
+    });
 
     return card;
   }
